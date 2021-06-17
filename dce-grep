@@ -1,0 +1,12 @@
+#!/usr/bin/execlineb -WS0
+
+multisubstitute {
+  importas -i dir dir
+  importas -i n n
+  define -s ignore "bmp doc jpeg jpg pdf rtf xls"
+}
+git grep -Pir $@
+  -e "\\b${n}\\b" --and --not -e "^\\s*('|Rem )"
+  --
+  ":(exclude,icase)*.${ignore}"
+  $dir

@@ -1,0 +1,17 @@
+#!/usr/bin/execlineb -W
+
+elgetopt fn
+importas -D "" ef ELGETOPT_f
+importas -D "" en ELGETOPT_n
+if {
+  ifelse { test -n $ef }
+  {
+    runblock -P 1 printf
+  }
+  ifelse { test -n $en }
+  {
+    runblock 1 echo -n
+  }
+  runblock 1 echo
+}
+runblock -r 1

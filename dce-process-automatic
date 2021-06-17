@@ -1,0 +1,11 @@
+#!/usr/bin/execlineb -WP
+
+multisubstitute {
+  importas -i t t
+  importas -i n n
+  importas -i fd fd
+}
+
+if { touch ${fd}/${t}.${n} }
+
+git checkout -fq

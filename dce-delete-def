@@ -1,0 +1,73 @@
+#!/usr/bin/execlineb -WP
+
+multisubstitute {
+  importas -i file file
+  importas -i t t
+  importas -i n n
+}
+
+define import "^\\s*(P(ublic|rivate)\\s+)?Declare\\s+${t}\\s+${n}\\>"
+define const  "^\\s*(P(ublic|rivate)\\s+)Const\\s+${n}\\>"
+define proto  "^\\s*(P(ublic|rivate)\\s+)?${t}\\s+([GS]et\\s+)?${n}\\>"
+
+exec sed -Eni "
+  /^'.*/ {
+    h; n
+    :comment
+    /^'.*/ {
+      H; n; b comment
+    }
+    /${import}/I {
+      b import
+    }
+    /${const}/I {
+      b const
+    }
+    /${proto}/I {
+      b def
+    }
+    # the comment did not precede our function
+    # print the comment saved up in the hold space
+    # followed by the current line, then start
+    # a new cycle
+    x; p
+    x; p
+    b
+  }
+
+  :import
+  /${import}/I {
+    :ibody
+    /_$/ {
+      n; b ibody
+    }
+    n; b tail
+  }
+
+  :const
+  /${const}/I {
+    :cbody
+    /_$/ {
+      n; b cbody
+    }
+    n; b tail
+  }
+
+  :def
+  /${proto}/I {
+    :dbody
+    /end\\s+${t}/I {
+      n; b tail
+    }
+    n; b dbody
+  }
+
+  :unrelated
+  p; b
+
+  :tail
+  /^\\s*$/ {
+    n; b tail;
+  }
+  b unrelated
+  " $file

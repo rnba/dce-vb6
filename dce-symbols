@@ -1,0 +1,83 @@
+#!/usr/bin/sed -Enf
+
+# ignore comments
+/^\s*(\<rem\>|').*/Id
+s/\s*(\<rem\>|').*//i
+
+s/\s+$//
+
+# join blocks of lines ending in "_"...
+/(^|\s+)_$/ {
+  s///
+  N
+  b
+}
+# ... ending with one which doesn't
+
+# replace newlines inserted by N
+s/\n/ /g
+
+s/^\s*//
+s/^(public|private)\s+//i
+
+s/\s+/ /g
+
+# ignore bodies, we only want file-level stuff
+/^(function|sub|enum|type|property [gls]et) (\w+).*/I {
+  s//\1 \2/
+  h
+  # now we have "Function fX" or "Property Get gY"
+  # also saved in hold space
+  :n
+  $ {
+    g
+    s/.*/error: '&' without an 'end' statement/
+    w /dev/stderr
+    q 1
+  }
+  N
+  # now we have "Function fX\nNEXTLINE"
+  # we're looking for "End Function"
+  /^(\w+) .+\nend \1$/I {
+    # "Function fX\nEnd Function"
+    #    (\w+)             \1
+    z; x;
+    bp
+  }
+  g
+  bn
+}
+
+/^(declare) (function|sub) (\w+).*/I {
+  s//\1 \2 \3/
+  bp
+}
+
+/^(const) (\w+).*/I {
+  s//\1 \2/
+  bp
+}
+
+/^(\w+)(\([[:digit:]]+\))? as\>.*/I {
+  s//var \1/
+  bp
+}
+
+b
+
+:p
+s/^(.+) (\w+)$/\L\1\E \2/
+s/\<function\>/fun/
+s/^property /p/
+s/^declare /d/
+
+s/^f/1 &/
+s/^s/1 &/
+s/^p/1 &/
+s/^e/2 &/
+s/^t/3 &/
+s/^d/4 &/
+s/^c/5 &/
+s/^v/5 &/
+
+p

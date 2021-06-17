@@ -1,0 +1,24 @@
+#!/usr/bin/execlineb -Ws1
+
+importas -i d d
+define progress ${d}/progress
+
+dce-switch $1
+case record {
+  if { touch $progress }
+  multisubstitute {
+    importas -i t t
+    importas -i n n
+    importas -i fd fd
+    importas -i sd sd
+  }
+  rm -f
+    ${fd}/${t}.${n}
+    ${sd}/${t}.${n}
+}
+case reset {
+  rm -f $progress
+}
+case made {
+  test -e $progress
+}
