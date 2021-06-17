@@ -1,0 +1,60 @@
+#!/bin/execlineb -WS3
+
+multisubstitute {
+  define file $1
+  define t $2
+  define n $3
+}
+
+define proto "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
+define import "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+${t}[[:space:]]+${n}"
+
+exec sed -Eni.${n} "
+  /^'.*/ {
+    h; n
+    :comment
+    /^'.*/ {
+      H; n; b comment
+    }
+    /${proto}/I {
+      b def
+    }
+    /${import}/I {
+      b import
+    }
+    # the comment did not precede our function
+    # print the comment saved up in the hold space
+    # followed by the current line, then start
+    # a new cycle
+    x; p
+    x; p
+    b
+  }
+
+  :def
+  /${proto}/I {
+    :dbody
+    /end[[:space:]]+${t}/I {
+      n; b tail
+    }
+    n; b dbody
+  }
+
+  :import
+  /${import}/I {
+    :ibody
+    /_$/ {
+      n; b ibody
+    }
+    n; b tail
+  }
+
+  :unrelated
+  p; b
+
+  :tail
+  /^[[:space:]]*$/ {
+    n; b tail;
+  }
+  b unrelated
+  " $file

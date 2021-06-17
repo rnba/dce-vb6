@@ -1,0 +1,29 @@
+#!/usr/bin/execlineb -W
+# vim: et ts=2 sts=2 et fdm=marker cms=\ #\ %s
+
+multisubstitute {
+  importas "#" "#"
+  importas 0 0
+  importas PATH PATH
+}
+backtick -E P { realpath $0 }
+backtick -E D { dirname $P }
+backtick -E F { basename $P }
+
+ifelse { test $# -lt 1 }
+{
+  foreground {
+    fdmove -c 2 1
+    printf "usage: %s FILE\n" $F
+  }
+  exit 1
+}
+
+elgetpositionals
+define file $1
+export PATH ${D}:${PATH}
+exec
+dce-pre-checks $F $file
+dce-delete-vcs-comment $file
+dce-prune-automatic $file
+dce-prune-interactive $file

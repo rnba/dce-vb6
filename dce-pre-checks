@@ -1,0 +1,40 @@
+#!/usr/bin/execlineb -Ws2
+
+multisubstitute {
+  define F $1
+  define file $2
+}
+ifelse -n { test -f $file }
+{
+  foreground {
+    fdmove -c 2 1
+    printf "%s: not a file: %s\n" $F $file
+  }
+  exit 1
+}
+ifelse -n { test -d .git }
+{
+  foreground {
+    fdmove -c 2 1
+    printf "%s: not a directory: .git\n" $F
+  }
+  exit 1
+}
+ifelse -n { git diff --quiet $file }
+{
+  foreground {
+    fdmove -c 2 1
+    printf "%s has changes in the worktree\n" $file
+  }
+  exit 1
+}
+ifelse -n { git diff --quiet --cached $file }
+{
+  foreground {
+    fdmove -c 2 1
+    printf "%s has changes in the index\n" $file
+  }
+  exit 2
+}
+
+exec $@

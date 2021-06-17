@@ -1,0 +1,17 @@
+#!/bin/execlineb -WS3
+
+multisubstitute {
+  define file $1
+  define t $2
+  define n $3
+}
+foreground { printf "\n>>> processing %s %s\n" $t $n }
+foreground { dce-delete-def $file $t $n }
+ifthenelse { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
+{
+  loopwhilex dce-prompt $file $n
+}
+{
+  dce-commit $file $n
+}
+rm -f ${file}.${n}

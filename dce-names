@@ -1,0 +1,6 @@
+#!/bin/execlineb -WS1
+
+pipeline { dce-symbols $1 }
+pipeline { cat -n }
+pipeline { sort -b -k 2,2n -k 1,1n }
+sed -E "s/^([[:space:]]+[[:digit:]]+){2} //"

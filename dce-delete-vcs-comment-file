@@ -1,0 +1,12 @@
+#!/bin/execlineb -Ws1
+
+sed -Eni.history "
+  /^[[:space:]]*'[[:space:]]*\\\$Workfile::/ {
+    :cruft
+    n
+    /^[[:space:]]*'/ b cruft
+    /^[[:space:]]*Rem[[:space:]]+/ b cruft
+    /^[[:space:]]*Rem[[:space:]]*\$/ b cruft
+  }
+  p
+  " $1

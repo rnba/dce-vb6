@@ -1,0 +1,3 @@
+#!/bin/execlineb -WS2
+
+git commit -aqm "${1}: drop ${2}"

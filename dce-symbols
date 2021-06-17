@@ -1,0 +1,14 @@
+#!/usr/bin/sed -Enf
+
+/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?(Enum|Function|Property[[:space:]]+[GS]et|Sub|Type)[[:space:]]+([[:alnum:]_]+).*/I {
+  s//\3 \4/
+  s/(Property)[[:space:]]+[GS]et[[:space:]]+([[:alnum:]_]+)/\1 \2/
+  /^(Function|Sub|Property)/s/^/1 /
+  /^Enum/s/^/2 /
+  /^Type/s/^/3 /
+  p
+}
+/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
+  s//4 \3 \4/
+  p
+}

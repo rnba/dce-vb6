@@ -1,0 +1,26 @@
+#!/bin/zsh -efu
+
+declare file=$1 n=$2
+
+print -f "\n>>> remaining matches:\n"
+git grep -iw $n $file:h
+print '>>> (c)ommit / (e)dit / (s)skip? '
+read -u 0 action
+case $action in
+c)
+  dce-commit $file $n
+  exit 1
+  ;;
+e)
+  ${VISUAL:-vim} $file </dev/tty
+  exit 0
+  ;;
+s)
+  mv $file.$n $file
+  exit 1
+  ;;
+*)
+  print -f "GOT %s" "$action"
+  exit 4
+  ;;
+esac
