@@ -1,0 +1,6 @@
+#!/usr/bin/execlineb -WS1
+
+define file $1
+
+if -n { git diff --quiet $file }
+  git commit -aqm "${file}: drop obsolete VCS comment"

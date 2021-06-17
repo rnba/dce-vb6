@@ -1,0 +1,7 @@
+#!/usr/bin/execlineb -WS1
+
+getcwd -E S
+importas -i P PATH
+export PATH ${S}:${P}
+
+dram -s /usr/bin/zsh $@

@@ -1,0 +1,33 @@
+#!/usr/bin/execlineb -Ws1
+
+dce-print { going $1 }
+
+if { dce-progress reset }
+
+if {
+  export mode $1
+  forbacktickx -Eo 0 x { dce-names }
+    multidefine $x { t n }
+    export t $t
+    export n $n
+    dce-process
+}
+
+ifelse { dce-progress made }
+{
+  exec $0 automatic $@
+}
+ifelse {
+  importas -i fd fd
+  importas -i sd sd
+  getcwd -E pwd
+  cd $fd
+  elglob -0 xs *
+  cd $pwd
+  forx -Eo 0 x { $xs }
+  test -e ${sd}/${x}
+}
+{
+  dce-print { all remaining symbols marked 'skip'. }
+}
+exec $@

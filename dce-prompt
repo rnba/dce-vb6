@@ -1,0 +1,52 @@
+#!/usr/bin/execlineb -Wp
+
+importas -i 0 0
+
+dce-print -f { "\\n[acCeqsS?] ? " }
+backtick -E x { sed -E 1q }
+dce-switch $x
+case ? {
+  dce-print -f {
+    "%s: %s\\n"
+      c "commit the proposal"
+      C "commit the proposal with a custom message"
+      e "edit files, then restart"
+      q "quit"
+      s "skip this symbol until grep results change"
+      S "start an interactive shell"
+      ? "this help"
+  }
+  exec $0
+}
+case a {
+  exec dce-prune automatic true
+}
+case c {
+  dce-commit
+}
+case C {
+  dce-commit --edit
+}
+case e {
+  importas -D vim VISUAL VISUAL
+  importas -i file file
+  foreground { $VISUAL $file }
+  importas ? ?
+  dce-print { $VISUAL exited $? }
+  exec dce-process-interactive
+}
+case q {
+  exit 1
+}
+case s {
+  if { git checkout -fq }
+  dce-skip add
+}
+case S {
+  dce-print { starting an interactive shell.  will resume when it exits. }
+  foreground { importas -i SHELL SHELL $SHELL -i }
+  exec dce-process-interactive
+}
+case _ {
+  exec $0
+}

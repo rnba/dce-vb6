@@ -1,0 +1,14 @@
+#!/usr/bin/execlineb -Ws0
+
+multisubstitute {
+  importas -i mode mode
+  importas -i file file
+  importas -i t t
+  importas -i n n
+}
+if {
+  redirfd -w 1 .git/msg
+  printf "%s: drop %s %s (%s)\\n" $file $t $n $mode
+}
+if { git commit -aqF .git/msg $@ }
+dce-progress record

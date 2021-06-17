@@ -1,0 +1,12 @@
+#!/usr/bin/execlineb -W
+
+importas -i 0 0
+importas -i val 1
+importas -i w 2
+importas -i p 3
+ifelse {
+  if { test $w = case }
+    test $p = $val -o $p = _
+}
+{ runblock -n 3 1 }
+runblock -n 3 -r 1 $0 $val
