@@ -1,4 +1,4 @@
-#!/bin/execlineb -Ws1
+#!/usr/bin/execlineb -Ws1
 
 sed -Eni.history "
   /^[[:space:]]*'[[:space:]]*\\\$Workfile::/ {

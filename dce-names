@@ -1,4 +1,4 @@
-#!/bin/execlineb -WS1
+#!/usr/bin/execlineb -WS1
 
 pipeline { dce-symbols $1 }
 pipeline { cat -n }

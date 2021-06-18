@@ -1,4 +1,4 @@
-#!/bin/execlineb -WS1
+#!/usr/bin/execlineb -WS1
 
 define file $1
 forbacktickx -E x { dce-names $file }

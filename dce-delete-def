@@ -1,4 +1,4 @@
-#!/bin/execlineb -WS3
+#!/usr/bin/execlineb -WS3
 
 multisubstitute {
   define file $1

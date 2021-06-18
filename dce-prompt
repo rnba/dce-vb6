@@ -1,4 +1,4 @@
-#!/bin/zsh -efu
+#!/usr/bin/zsh -efu
 
 declare file=$1 n=$2
 
