@@ -1,0 +1,7 @@
+#!/usr/bin/execlineb -Ws1
+
+foreground {
+  if { dce-delete-vcs-comment-file $1 }
+    dce-delete-vcs-comment-git $1
+}
+exec $@
