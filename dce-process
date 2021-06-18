@@ -1,0 +1,14 @@
+#!/usr/bin/execlineb -WS4
+
+multisubstitute {
+  define next $1
+  define file $2
+  define t $3
+  define n $4
+}
+foreground { dce-delete-def $file $t $n }
+ifelse -n { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
+{
+  dce-commit $file $n
+}
+exec $next $file $n

@@ -1,3 +1,4 @@
 #!/usr/bin/execlineb -WS2
 
+foreground { rm ${1}.${2} }
 git commit -aqm "${1}: drop ${2}"

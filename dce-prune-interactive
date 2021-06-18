@@ -3,4 +3,4 @@
 define file $1
 forbacktickx -E x { dce-names $file }
   define -s tn $x
-  dce-process-interactive $file $tn
+  dce-process dce-process-interactive $file $tn

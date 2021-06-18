@@ -1,16 +1,4 @@
-#!/usr/bin/execlineb -WS3
+#!/usr/bin/execlineb -WS2
 
-multisubstitute {
-  define file $1
-  define t $2
-  define n $3
-}
-foreground { echo dce-process-automatic $file $t $n }
-foreground { dce-delete-def $file $t $n }
-ifelse -n { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
-{
-  foreground { rm ${file}.${n} }
-  dce-commit $file $n
-}
-foreground { mv ${file}.${n} $file }
+foreground { mv ${1}.${2} $1 }
 exit 1

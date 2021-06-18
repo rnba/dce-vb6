@@ -6,7 +6,7 @@ shift
 while :; do
   go_on=false
   for t n in $(dce-names $file); do
-    if dce-process-automatic $file $t $n; then
+    if dce-process dce-process-automatic $file $t $n; then
       go_on=true
     fi
   done
