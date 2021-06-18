@@ -5,7 +5,7 @@ multisubstitute {
   define t $2
   define n $3
 }
-foreground { printf "\n>>> processing %s %s\n" $t $n }
+foreground { echo dce-process-interactive $file $t $n }
 foreground { dce-delete-def $file $t $n }
 ifthenelse { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
 {

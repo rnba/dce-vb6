@@ -7,8 +7,7 @@ multisubstitute {
 }
 foreground { echo dce-process-automatic $file $t $n }
 foreground { dce-delete-def $file $t $n }
-backtick -E dir { dirname $file }
-ifelse -n { git grep -iqrw $n $dir }
+ifelse -n { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
 {
   foreground { rm ${file}.${n} }
   dce-commit $file $n
