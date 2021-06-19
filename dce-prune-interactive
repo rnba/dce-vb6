@@ -1,6 +1,0 @@
-#!/usr/bin/execlineb -WS1
-
-define file $1
-forbacktickx -E x { dce-names $file }
-  define -s tn $x
-  dce-process dce-process-interactive $file $tn

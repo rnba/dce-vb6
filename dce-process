@@ -6,9 +6,11 @@ multisubstitute {
   define t $3
   define n $4
 }
+foreground { echo processing $file $t $n }
 foreground { dce-delete-def $file $t $n }
 ifelse -n { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
 {
+  foreground { touch go_on }
   dce-commit $file $n
 }
 exec $next $file $n

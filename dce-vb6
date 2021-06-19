@@ -25,5 +25,6 @@ export PATH ${D}:${PATH}
 exec
 dce-pre-checks $F $file
 dce-delete-vcs-comment $file
-dce-prune-automatic $file
-dce-prune-interactive $file
+dce-prune automatic $file
+dce-prune interactive $file
+exit
