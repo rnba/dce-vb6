@@ -21,10 +21,12 @@ ifelse { test $# -lt 1 }
 
 elgetpositionals
 define file $1
+export file $file
+backtick dir { dirname $file }
 export PATH ${D}:${PATH}
 exec
 dce-pre-checks $F $file
 dce-delete-vcs-comment $file
-dce-prune automatic $file
-dce-prune interactive $file
+dce-prune automatic
+dce-prune interactive
 exit

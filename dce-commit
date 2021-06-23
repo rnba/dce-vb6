@@ -1,4 +1,8 @@
-#!/usr/bin/execlineb -WS2
+#!/usr/bin/execlineb -W
 
-foreground { rm ${1}.${2} }
-git commit -aqm "${1}: drop ${2}"
+multisubstitute {
+  importas -i file file
+  importas -i n n
+}
+foreground { rm ${file}.${n} }
+git commit -aqm "${file}: drop ${n}"

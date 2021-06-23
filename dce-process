@@ -1,16 +1,17 @@
-#!/usr/bin/execlineb -WS4
+#!/usr/bin/execlineb -WS1
 
 multisubstitute {
   define next $1
-  define file $2
-  define t $3
-  define n $4
+  importas -i dir dir
+  importas -i file file
+  importas -i t t
+  importas -i n n
 }
 foreground { echo processing $file $t $n }
-foreground { dce-delete-def $file $t $n }
-ifelse -n { backtick -E dir { dirname $file } git grep -iqrw $n $dir }
+foreground { dce-delete-def }
+ifelse -n { git grep -iqrw $n $dir }
 {
   foreground { touch go_on }
-  dce-commit $file $n
+  dce-commit
 }
-exec $next $file $n
+exec $next

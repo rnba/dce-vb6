@@ -1,3 +1,7 @@
-#!/usr/bin/execlineb -WS2
+#!/usr/bin/execlineb -W
 
-mv ${1}.${2} $1
+multisubstitute {
+  importas -i file file
+  importas -i n n
+}
+mv ${file}.${n} ${file}

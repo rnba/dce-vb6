@@ -1,14 +1,15 @@
-#!/usr/bin/execlineb -Ws2
+#!/usr/bin/execlineb -Ws1
 
 define mode $1
-define file $2
 foreground {
   loopwhilex
     foreground { rm -f go_on }
     foreground {
-      forbacktickx -E x { dce-names $file }
-        define -s tn $x
-        dce-process dce-process-$mode $file $tn
+      forbacktickx -E x { dce-names }
+        multidefine $x { t n }
+        export t $t
+        export n $n
+        dce-process dce-process-$mode
     }
     test -e go_on
 }

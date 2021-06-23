@@ -1,9 +1,9 @@
-#!/usr/bin/execlineb -WS3
+#!/usr/bin/execlineb -W
 
 multisubstitute {
-  define file $1
-  define t $2
-  define n $3
+  importas -i file file
+  importas -i t t
+  importas -i n n
 }
 
 define proto "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
