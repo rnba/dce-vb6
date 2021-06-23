@@ -1,6 +1,6 @@
 #!/usr/bin/execlineb -Ws1
 
-define mode $1
+export mode $1
 foreground {
   loopwhilex
     foreground { rm -f go_on }
@@ -9,7 +9,7 @@ foreground {
         multidefine $x { t n }
         export t $t
         export n $n
-        dce-process dce-process-$mode
+        dce-process
     }
     test -e go_on
 }

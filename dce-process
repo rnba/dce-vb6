@@ -1,7 +1,7 @@
-#!/usr/bin/execlineb -WS1
+#!/usr/bin/execlineb -W
 
 multisubstitute {
-  define next $1
+  importas -i mode mode
   importas -i dir dir
   importas -i file file
   importas -i t t
@@ -9,9 +9,10 @@ multisubstitute {
 }
 foreground { echo processing $file $t $n }
 foreground { dce-delete-def }
+foreground { git diff }
 ifelse -n { git grep -iqrw $n $dir }
 {
   foreground { touch go_on }
-  dce-commit
+  dce-commit -F
 }
-exec $next
+exec dce-process-${mode}
