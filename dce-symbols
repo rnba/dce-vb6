@@ -12,3 +12,7 @@
   s//4 \3 \4/
   p
 }
+/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)(Const)[[:space:]]+([[:alnum:]_]+).*/I {
+  s//5 \3 \4/
+  p
+}

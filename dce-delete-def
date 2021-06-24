@@ -6,8 +6,9 @@ multisubstitute {
   importas -i n n
 }
 
-define proto "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
-define import "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+${t}[[:space:]]+${n}"
+define import "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+${t}[[:space:]]+${n}($|[^_[:alnum:]])"
+define const  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)Const[[:space:]]+${n}($|[^_[:alnum:]])"
+define proto  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
 
 exec sed -Eni.${n} "
   /^'.*/ {
@@ -16,11 +17,14 @@ exec sed -Eni.${n} "
     /^'.*/ {
       H; n; b comment
     }
-    /${proto}/I {
-      b def
-    }
     /${import}/I {
       b import
+    }
+    /${const}/I {
+      b const
+    }
+    /${proto}/I {
+      b def
     }
     # the comment did not precede our function
     # print the comment saved up in the hold space
@@ -31,15 +35,6 @@ exec sed -Eni.${n} "
     b
   }
 
-  :def
-  /${proto}/I {
-    :dbody
-    /end[[:space:]]+${t}/I {
-      n; b tail
-    }
-    n; b dbody
-  }
-
   :import
   /${import}/I {
     :ibody
@@ -47,6 +42,24 @@ exec sed -Eni.${n} "
       n; b ibody
     }
     n; b tail
+  }
+
+  :const
+  /${const}/I {
+    :cbody
+    /_$/ {
+      n; b cbody
+    }
+    n; b tail
+  }
+
+  :def
+  /${proto}/I {
+    :dbody
+    /end[[:space:]]+${t}/I {
+      n; b tail
+    }
+    n; b dbody
   }
 
   :unrelated
