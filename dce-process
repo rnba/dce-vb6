@@ -9,7 +9,6 @@ multisubstitute {
 }
 foreground { echo processing $file $t $n }
 foreground { dce-delete-def }
-foreground { git diff }
 ifelse -n { git grep -iqrw $n $dir }
 {
   foreground { touch go_on }

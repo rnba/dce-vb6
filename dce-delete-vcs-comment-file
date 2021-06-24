@@ -1,7 +1,7 @@
 #!/usr/bin/execlineb -Ws1
 
 sed -Eni.history "
-  /^[[:space:]]*'[[:space:]]*\\\$Workfile::/ {
+  /^[[:space:]]*'[[:space:]]*\\\$Workfile:/ {
     :cruft
     n
     /^[[:space:]]*'/ b cruft

@@ -1,10 +1,17 @@
 #!/usr/bin/zsh -efu
 
+git diff
+
 print -f "\n>>> remaining matches:\n"
-git grep -iw $n $dir
+git grep -iw $n $dir || :
 print '>>> (c)ommit / (e)dit / (s)skip / (w)rite commit msg? '
 read -u 0 action
 case $action in
+S)
+  print "starting an interactive shell.  will resume when it exits."
+  $SHELL -i
+  exit 0
+;;
 c)
   dce-commit -F
   exit 1
