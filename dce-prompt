@@ -3,7 +3,7 @@
 git diff
 
 print -f "\n>>> remaining matches:\n"
-git grep -iw $n $dir || :
+dce-grep --heading || :
 print '>>> (c)ommit / (e)dit / (s)skip / (w)rite commit msg? '
 read -u 0 action
 case $action in
