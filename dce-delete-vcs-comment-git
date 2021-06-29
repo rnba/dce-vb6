@@ -3,5 +3,4 @@
 define file $1
 
 if -n { git diff --quiet $file }
-  foreground { git commit -aqm "${file}: drop obsolete VCS comment" }
-  foreground { rm ${file}.history }
+  git commit -aqm "${file}: drop obsolete VCS comment"

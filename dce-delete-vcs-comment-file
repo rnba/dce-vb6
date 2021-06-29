@@ -1,6 +1,6 @@
 #!/usr/bin/execlineb -Ws1
 
-sed -Eni.history "
+sed -Eni "
   /^[[:space:]]*'[[:space:]]*\\\$Workfile:/ {
     :cruft
     n
