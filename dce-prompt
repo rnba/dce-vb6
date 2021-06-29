@@ -12,6 +12,9 @@ S)
   $SHELL -i
   exit 0
 ;;
+a)
+  exec dce-prune automatic true
+;;
 c)
   dce-commit -F
   exit 1
