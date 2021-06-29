@@ -10,7 +10,7 @@ define import "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+${t
 define const  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)Const[[:space:]]+${n}($|[^_[:alnum:]])"
 define proto  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
 
-exec sed -Eni.${n} "
+exec sed -Eni "
   /^'.*/ {
     h; n
     :comment

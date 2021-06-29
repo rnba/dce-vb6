@@ -1,7 +1,3 @@
 #!/usr/bin/execlineb -W
 
-multisubstitute {
-  importas -i file file
-  importas -i n n
-}
-mv ${file}.${n} ${file}
+git checkout -fq

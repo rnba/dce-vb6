@@ -21,7 +21,6 @@ e)
   exit 0
   ;;
 s)
-  rm -f $file.$n
   git checkout -f
   exit 1
   ;;
