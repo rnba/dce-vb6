@@ -1,0 +1,18 @@
+#!/usr/bin/execlineb -WS1
+
+define file $1
+backtick -E _dir { dirname $file }
+backtick -E base { basename $file }
+importas -D $_dir dir dir
+define msg "\
+${file}: deleted whole
+
+none of it is used.
+"
+if { git rm $file }
+elglob -0 vbps ${dir}/*.vbp
+if {
+  forx -Epo 0 vbp { $vbps }
+  sed -Ei -e "/^Module=[^;]+;[[:space:]]*${base}[[:space:]]*/d" $vbp
+}
+git commit -qm $msg $file $vbps
