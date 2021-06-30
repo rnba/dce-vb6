@@ -5,7 +5,7 @@ foreground {
   loopwhilex
     foreground { rm -f go_on }
     foreground {
-      forbacktickx -E x { dce-names }
+      forbacktickx -Eo 0 x { dce-names }
         multidefine $x { t n }
         export t $t
         export n $n
