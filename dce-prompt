@@ -10,29 +10,26 @@ case $action in
 S)
   print "starting an interactive shell.  will resume when it exits."
   $SHELL -i
-  exit 0
+  exec dce-prompt
 ;;
 a)
   exec dce-prune automatic true
 ;;
 c)
   dce-commit -F
-  exit 1
   ;;
 e)
   ${VISUAL:-vim} $file </dev/tty
-  exit 0
+  exec dce-prompt
   ;;
 s)
   git checkout -f
-  exit 1
   ;;
 w)
   dce-commit -t
-  exit 1
   ;;
 *)
   print -f "GOT %s" "$action"
-  exit 0
+  exec dce-prompt
   ;;
 esac
