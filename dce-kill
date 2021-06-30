@@ -9,7 +9,7 @@ ${file}: deleted whole
 
 none of it is used.
 "
-if { git rm $file }
+if { git rm -q $file }
 elglob -0 vbps ${dir}/*.vbp
 if {
   forx -Epo 0 vbp { $vbps }
