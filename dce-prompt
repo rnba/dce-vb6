@@ -2,13 +2,6 @@
 
 importas -i 0 0
 
-if {
-  if -t { importas -D "" 1 1 test -z $1 }
-  if { git diff }
-  if { printf "\nremaining matches:\n" }
-  if -t { dce-grep --heading }
-}
-
 if { printf "\n[Saceqsw?] ? " }
 backtick -E x { sed -E 1q }
 dce-switch $x
@@ -16,27 +9,29 @@ case S {
   if { echo "starting an interactive shell.  will resume when it exits." }
   importas -i SHELL SHELL
   foreground { $SHELL -i }
-  exec $0
+  exec dce-process-interactive
 }
 case c {
-  dce-commit -F
+  exec dce-commit -F
 }
 case e {
   importas -D vim VISUAL VISUAL
   importas -i file file
-  if -nt { $VISUAL $file }
-  importas ? ?
-  echo $VISUAL exited $?
-  exec $0
+  foreground { $VISUAL $file }
+  foreground {
+    importas ? ?
+    printf "%s exited %d\n" $VISUAL $?
+  }
+  exec dce-process-interactive
 }
 case q {
   exit
 }
 case s {
-  git checkout -fq
+  exec git checkout -fq
 }
 case w {
-  dce-commit -t
+  exec dce-commit -t
 }
 case ? {
   if {
@@ -47,8 +42,8 @@ case ? {
       "s: skip the proposal"
       "w: commit the proposal with a custom message"
   }
-  exec $0 ?
+  exec $0
 }
 case _ {
-  exec $0 ?
+  exec $0
 }

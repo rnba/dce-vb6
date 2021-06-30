@@ -1,3 +1,7 @@
-#!/usr/bin/execlineb -Wp
+#!/usr/bin/execlineb -W
+
+if { git diff }
+if { printf "\nremaining matches:\n" }
+foreground { dce-grep --heading }
 
 dce-prompt
