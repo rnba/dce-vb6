@@ -1,35 +1,54 @@
-#!/usr/bin/zsh -efu
+#!/usr/bin/execlineb -Wp
 
-git diff
+importas -i 0 0
 
-print -f "\n>>> remaining matches:\n"
-dce-grep --heading || :
-print '>>> (c)ommit / (e)dit / (s)skip / (w)rite commit msg? '
-read -u 0 action
-case $action in
-S)
-  print "starting an interactive shell.  will resume when it exits."
-  $SHELL -i
-  exec dce-prompt
-;;
-a)
-  exec dce-prune automatic true
-;;
-c)
+if {
+  if -t { importas -D "" 1 1 test -z $1 }
+  if { git diff }
+  if { printf "\nremaining matches:\n" }
+  if -t { dce-grep --heading }
+}
+
+if { printf "\n[Saceqsw?] ? " }
+backtick -E x { sed -E 1q }
+dce-switch $x
+case S {
+  if { echo "starting an interactive shell.  will resume when it exits." }
+  importas -i SHELL SHELL
+  foreground { $SHELL -i }
+  exec $0
+}
+case c {
   dce-commit -F
-  ;;
-e)
-  ${VISUAL:-vim} $file </dev/tty
-  exec dce-prompt
-  ;;
-s)
-  git checkout -f
-  ;;
-w)
+}
+case e {
+  importas -D vim VISUAL VISUAL
+  importas -i file file
+  if -nt { $VISUAL $file }
+  importas ? ?
+  echo $VISUAL exited $?
+  exec $0
+}
+case q {
+  exit
+}
+case s {
+  git checkout -fq
+}
+case w {
   dce-commit -t
-  ;;
-*)
-  print -f "GOT %s" "$action"
-  exec dce-prompt
-  ;;
-esac
+}
+case ? {
+  if {
+    printf "%s\n"
+      "S: start an interactive shell"
+      "c: commit the proposal"
+      "e: edit files, then restart"
+      "s: skip the proposal"
+      "w: commit the proposal with a custom message"
+  }
+  exec $0 ?
+}
+case _ {
+  exec $0 ?
+}
