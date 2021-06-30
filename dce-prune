@@ -1,16 +1,14 @@
 #!/usr/bin/execlineb -Ws1
 
-export mode $1
-foreground {
-  loopwhilex
-    foreground { rm -f go_on }
-    foreground {
-      forbacktickx -Eo 0 x { dce-names }
-        multidefine $x { t n }
-        export t $t
-        export n $n
-        dce-process
-    }
-    test -e go_on
+if { rm -f go_on }
+if {
+  export mode $1
+  forbacktickx -Eo 0 x { dce-names }
+    multidefine $x { t n }
+    export t $t
+    export n $n
+    dce-process
 }
+ifelse { test -e go_on }
+{ exec $0 $1 $@ }
 exec $@
