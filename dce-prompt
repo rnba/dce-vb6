@@ -25,7 +25,7 @@ case e {
   exec dce-process-interactive
 }
 case q {
-  exit
+  exit 1
 }
 case s {
   exec git checkout -fq
