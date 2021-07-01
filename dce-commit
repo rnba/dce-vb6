@@ -7,4 +7,4 @@ multisubstitute {
   importas -i n n
 }
 foreground { redirfd -w 1 .git/msg printf "%s: drop %s %s (%s)\n" $file $t $n $mode }
-git commit -aq -F .git/msg $@
+git commit -aqF .git/msg $@
