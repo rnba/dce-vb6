@@ -12,7 +12,7 @@ case ? {
       "C: commit the proposal with a custom message"
       "e: edit files, then restart"
       "q: quit"
-      "s: skip the proposal"
+      "s: skip this symbol until grep results change"
       "S: start an interactive shell"
       "?: this help"
   }
@@ -22,10 +22,10 @@ case a {
   exec dce-prune automatic true
 }
 case c {
-  exec dce-commit
+  if { dce-commit } touch go_on
 }
 case C {
-  exec dce-commit --edit
+  if { dce-commit --edit } touch go_on
 }
 case e {
   importas -D vim VISUAL VISUAL
@@ -41,7 +41,8 @@ case q {
   exit 1
 }
 case s {
-  exec git checkout -fq
+  if { git checkout -fq }
+  dce-skip add
 }
 case S {
   if { echo "starting an interactive shell.  will resume when it exits." }

@@ -1,0 +1,24 @@
+#!/usr/bin/execlineb -Ws1
+
+multisubstitute {
+  importas -i file file
+  importas -i t t
+  importas -i n n
+}
+
+define sd .git/dce-vb6/ignore/${file}
+define sf ${sd}/${t}.${n}
+define st ${sf}.tmp
+
+if { mkdir -p $sd }
+if { redirfd -w 1 $st foreground { dce-grep } }
+
+ifelse { test $1 = add }
+{
+  mv $st $sf
+}
+
+foreground { cmp -s $st $sf }
+if { rm -f $st }
+if -t { importas ? ? test $? -ne 0 }
+exec $@
