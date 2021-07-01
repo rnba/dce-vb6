@@ -2,17 +2,30 @@
 
 importas -i 0 0
 
-if { printf "\n[Saceqsw?] ? " }
+if { printf "\n[acCeqsS?] ? " }
 backtick -E x { sed -E 1q }
 dce-switch $x
-case S {
-  if { echo "starting an interactive shell.  will resume when it exits." }
-  importas -i SHELL SHELL
-  foreground { $SHELL -i }
-  exec dce-process-interactive
+case ? {
+  if {
+    printf "%s\n"
+      "c: commit the proposal"
+      "C: commit the proposal with a custom message"
+      "e: edit files, then restart"
+      "q: quit"
+      "s: skip the proposal"
+      "S: start an interactive shell"
+      "?: this help"
+  }
+  exec $0
+}
+case a {
+  exec dce-prune automatic true
 }
 case c {
   exec dce-commit
+}
+case C {
+  exec dce-commit --edit
 }
 case e {
   importas -D vim VISUAL VISUAL
@@ -30,19 +43,11 @@ case q {
 case s {
   exec git checkout -fq
 }
-case w {
-  exec dce-commit --edit
-}
-case ? {
-  if {
-    printf "%s\n"
-      "S: start an interactive shell"
-      "c: commit the proposal"
-      "e: edit files, then restart"
-      "s: skip the proposal"
-      "w: commit the proposal with a custom message"
-  }
-  exec $0
+case S {
+  if { echo "starting an interactive shell.  will resume when it exits." }
+  importas -i SHELL SHELL
+  foreground { $SHELL -i }
+  exec dce-process-interactive
 }
 case _ {
   exec $0
