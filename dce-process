@@ -10,6 +10,6 @@ foreground { echo processing $file $t $n }
 foreground { dce-delete-def }
 ifelse -n { dce-grep -q }
 {
-  if { dce-commit -F } touch go_on
+  if { dce-commit } touch go_on
 }
 exec dce-process-${mode}

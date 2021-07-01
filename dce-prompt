@@ -12,7 +12,7 @@ case S {
   exec dce-process-interactive
 }
 case c {
-  exec dce-commit -F
+  exec dce-commit
 }
 case e {
   importas -D vim VISUAL VISUAL
@@ -31,7 +31,7 @@ case s {
   exec git checkout -fq
 }
 case w {
-  exec dce-commit -t
+  exec dce-commit --edit
 }
 case ? {
   if {

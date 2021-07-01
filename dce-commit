@@ -1,15 +1,10 @@
-#!/usr/bin/execlineb -WS1
+#!/usr/bin/execlineb -Ws0
 
 multisubstitute {
-  define flag $1
   importas -i mode mode
   importas -i file file
   importas -i t t
   importas -i n n
 }
 foreground { redirfd -w 1 .git/msg printf "%s: drop %s %s (%s)\n" $file $t $n $mode }
-ifelse { test $mode = automatic }
-{
-  git commit -aq -F .git/msg
-}
-git commit -aq $flag .git/msg
+git commit -aq -F .git/msg $@
