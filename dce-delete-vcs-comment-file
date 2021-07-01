@@ -1,4 +1,4 @@
-#!/usr/bin/execlineb -Ws1
+#!/usr/bin/execlineb -WS1
 
 sed -Eni "
   /^[[:space:]]*'[[:space:]]*\\\$Workfile:/ {

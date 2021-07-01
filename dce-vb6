@@ -1,4 +1,4 @@
-#!/usr/bin/execlineb -W
+#!/usr/bin/execlineb -Wp
 # vim: et ts=2 sts=2 et fdm=marker cms=\ #\ %s
 
 multisubstitute {
@@ -25,7 +25,7 @@ export file $file
 backtick dir { dirname $file }
 export PATH ${D}:${PATH}
 exec
-dce-pre-checks $F $file
+dce-pre-checks $F
 dce-delete-vcs-comment $file
 dce-prune automatic
 dce-prune interactive

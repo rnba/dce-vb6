@@ -1,12 +1,11 @@
-#!/usr/bin/execlineb -W
+#!/usr/bin/execlineb -WS0
 
 multisubstitute {
-  importas opts 1
   importas -i dir dir
   importas -i n n
   define -s ignore "bmp doc jpeg jpg pdf rtf xls"
 }
-git grep -Pir $opts
+git grep -Pir $@
   -e "\\b${n}\\b" --and --not -e "^('|Rem )"
   --
   ":(exclude,icase)*.${ignore}"

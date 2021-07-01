@@ -1,4 +1,4 @@
-#!/usr/bin/execlineb -W
+#!/usr/bin/execlineb -WP
 
 if { git diff }
 if { printf "\nremaining matches:\n" }

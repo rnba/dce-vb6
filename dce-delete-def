@@ -1,4 +1,4 @@
-#!/usr/bin/execlineb -W
+#!/usr/bin/execlineb -WP
 
 multisubstitute {
   importas -i file file

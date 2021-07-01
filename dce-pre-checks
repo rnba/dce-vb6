@@ -1,8 +1,8 @@
-#!/usr/bin/execlineb -Ws2
+#!/usr/bin/execlineb -Ws1
 
 multisubstitute {
   define F $1
-  define file $2
+  importas -i file file
 }
 ifelse -n { test -f $file }
 {
