@@ -1,13 +1,12 @@
-#!/usr/bin/execlineb -Wp
+#!/usr/bin/execlineb -W
 
 importas -i 0 0
 importas -i val 1
-shift -n 1
-importas -i w 1
-importas -i p 2
+importas -i w 2
+importas -i p 3
 ifelse {
   if { test $w = case }
     test $p = $val -o $p = _
 }
-{ runblock -Pn 2 1 }
-runblock -Pn 2 -r 1 $0 $val
+{ runblock -n 3 1 }
+runblock -n 3 -r 1 $0 $val
