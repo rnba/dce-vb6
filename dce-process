@@ -6,7 +6,7 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
-foreground { echo processing $file $t $n }
+dce-print { processing $file $t $n }
 dce-skip test
 foreground { dce-delete-def }
 ifelse -n { dce-grep -q }

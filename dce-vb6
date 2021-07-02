@@ -12,10 +12,8 @@ backtick -E F { basename $P }
 
 ifelse { test $# -lt 1 }
 {
-  foreground {
-    fdmove -c 2 1
-    printf "usage: %s FILE\n" $F
-  }
+  fdmove -c 2 1
+  dce-print -f { "usage: %s FILE\n" $F }
   exit 1
 }
 

@@ -2,19 +2,19 @@
 
 importas -i 0 0
 
-if { printf "\n[acCeqsS?] ? " }
+dce-print -f { "\n[acCeqsS?] ? " }
 backtick -E x { sed -E 1q }
 dce-switch $x
 case ? {
-  if {
-    printf "%s\n"
-      "c: commit the proposal"
-      "C: commit the proposal with a custom message"
-      "e: edit files, then restart"
-      "q: quit"
-      "s: skip this symbol until grep results change"
-      "S: start an interactive shell"
-      "?: this help"
+  dce-print -f {
+    "%s: %s\n"
+      c "commit the proposal"
+      C "commit the proposal with a custom message"
+      e "edit files, then restart"
+      q "quit"
+      s "skip this symbol until grep results change"
+      S "start an interactive shell"
+      ? "this help"
   }
   exec $0
 }
@@ -31,10 +31,8 @@ case e {
   importas -D vim VISUAL VISUAL
   importas -i file file
   foreground { $VISUAL $file }
-  foreground {
-    importas ? ?
-    printf "%s exited %d\n" $VISUAL $?
-  }
+  importas ? ?
+  dce-print { $VISUAL exited $? }
   exec dce-process-interactive
 }
 case q {
@@ -45,9 +43,8 @@ case s {
   dce-skip add
 }
 case S {
-  if { echo "starting an interactive shell.  will resume when it exits." }
-  importas -i SHELL SHELL
-  foreground { $SHELL -i }
+  dce-print { starting an interactive shell.  will resume when it exits. }
+  foreground { importas -i SHELL SHELL $SHELL -i }
   exec dce-process-interactive
 }
 case _ {
