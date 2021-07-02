@@ -22,10 +22,10 @@ case a {
   exec dce-prune automatic true
 }
 case c {
-  if { dce-commit } touch go_on
+  dce-commit
 }
 case C {
-  if { dce-commit --edit } touch go_on
+  dce-commit --edit
 }
 case e {
   importas -D vim VISUAL VISUAL

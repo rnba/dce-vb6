@@ -6,5 +6,9 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
-foreground { redirfd -w 1 .git/msg printf "%s: drop %s %s (%s)\n" $file $t $n $mode }
-git commit -aqF .git/msg $@
+if {
+  redirfd -w 1 .git/msg
+  printf "%s: drop %s %s (%s)\n" $file $t $n $mode
+}
+if { git commit -aqF .git/msg $@ }
+touch go_on
