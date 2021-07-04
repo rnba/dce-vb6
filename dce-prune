@@ -2,9 +2,7 @@
 
 dce-print { going $1 }
 
-importas -i d d
-
-if { rm -f ${d}/progress }
+if { dce-progress reset }
 
 if {
   export mode $1
@@ -15,7 +13,7 @@ if {
     dce-process
 }
 
-ifelse { test -e ${d}/progress }
+ifelse { dce-progress made }
 {
   exec $0 automatic $@
 }
