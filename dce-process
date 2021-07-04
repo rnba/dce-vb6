@@ -6,11 +6,11 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
-dce-print { processing $file $t $n }
 dce-skip test
 foreground { dce-delete-def }
 ifelse -n { dce-grep -q }
 {
+  dce-print { commit $t $n }
   dce-commit
 }
 exec dce-process-${mode}

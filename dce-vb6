@@ -21,6 +21,18 @@ elgetpositionals
 define file $1
 export file $file
 backtick dir { dirname $file }
+
+define d .git/dce-vb6/${file}
+multisubstitute {
+  define sd ${d}/skip
+  define fd ${d}/fail
+}
+export d $d
+export fd $fd
+export sd $sd
+
+if { mkdir -p $fd $sd }
+
 export PATH ${D}:${PATH}
 exec
 dce-pre-checks $F

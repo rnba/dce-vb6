@@ -4,13 +4,12 @@ multisubstitute {
   importas -i file file
   importas -i t t
   importas -i n n
+  importas -i sd sd
 }
 
-define sd .git/dce-vb6/ignore/${file}
 define sf ${sd}/${t}.${n}
 define st ${sf}.tmp
 
-if { mkdir -p $sd }
 if { redirfd -w 1 $st foreground { dce-grep } }
 
 ifelse { test $1 = add }
@@ -20,5 +19,8 @@ ifelse { test $1 = add }
 
 foreground { cmp -s $st $sf }
 if { rm -f $st }
-if -t { importas ? ? test $? -ne 0 }
+ifelse { importas ? ? test $? -eq 0 }
+{
+  dce-print { skip $t $n }
+}
 exec $@

@@ -1,6 +1,11 @@
 #!/usr/bin/execlineb -Ws1
 
-if { rm -f go_on }
+dce-print { going $1 }
+
+importas -i d d
+
+if { rm -f ${d}/progress }
+
 if {
   export mode $1
   forbacktickx -Eo 0 x { dce-names }
@@ -9,6 +14,22 @@ if {
     export n $n
     dce-process
 }
-ifelse { test -e go_on }
-{ exec $0 $1 $@ }
+
+ifelse { test -e ${d}/progress }
+{
+  exec $0 automatic $@
+}
+ifelse {
+  importas -i fd fd
+  importas -i sd sd
+  getcwd -E pwd
+  cd $fd
+  elglob -0 xs *
+  cd $pwd
+  forx -Eo 0 x { $xs }
+  test -e ${sd}/${x}
+}
+{
+  dce-print { all remaining symbols marked 'skip'. }
+}
 exec $@

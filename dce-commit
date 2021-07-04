@@ -3,6 +3,9 @@
 multisubstitute {
   importas -i mode mode
   importas -i file file
+  importas -i d d
+  importas -i fd fd
+  importas -i sd sd
   importas -i t t
   importas -i n n
 }
@@ -11,4 +14,7 @@ if {
   printf "%s: drop %s %s (%s)\n" $file $t $n $mode
 }
 if { git commit -aqF .git/msg $@ }
-touch go_on
+if { touch ${d}/progress }
+rm -f
+  ${fd}/${t}.${n}
+  ${sd}/${t}.${n}
