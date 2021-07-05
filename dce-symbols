@@ -1,18 +1,53 @@
 #!/usr/bin/sed -Enf
 
-/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?(Enum|Function|Property[[:space:]]+[GS]et|Sub|Type)[[:space:]]+([[:alnum:]_]+).*/I {
-  s//\3 \4/
-  s/(Property)[[:space:]]+[GS]et[[:space:]]+([[:alnum:]_]+)/\1 \2/
-  /^(Function|Sub|Property)/s/^/1 /
-  /^Enum/s/^/2 /
-  /^Type/s/^/3 /
-  p
-}
-/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
-  s//4 \3 \4/
-  p
-}
-/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)(Const)[[:space:]]+([[:alnum:]_]+).*/I {
-  s//5 \3 \4/
-  p
+/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?/ {
+  s///
+  /^(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
+    s//1 \1 \2/
+    p
+    /^. Function/I {
+      :Function
+      /^[[:space:]]*End[[:space:]]+Function/I! { n; b Function; }
+    }
+    /^. Sub/I {
+      :Sub
+      /^[[:space:]]*End[[:space:]]+Sub/I! { n; b Sub; }
+    }
+  }
+  /^(Property)[[:space:]]+[GS]et[[:space:]]+([[:alnum:]_]+).*/I {
+    s//1 \1 \2/
+    p
+    /^. Property/I {
+      :Property
+      /^[[:space:]]*End[[:space:]]+Property/I! { n; b Property; }
+    }
+  }
+  /^(Enum)[[:space:]]+([[:alnum:]_]+).*/I {
+    s//2 \1 \2/
+    p
+    /^. Enum/I {
+      :Enum
+      /^[[:space:]]*End[[:space:]]+Enum/I! { n; b Enum; }
+    }
+  }
+  /^(Type)[[:space:]]+([[:alnum:]_]+).*/I {
+    s//3 \1 \2/
+    p
+    /^. Type/I {
+      :Type
+      /^[[:space:]]*End[[:space:]]+Type/I! { n; b Type; }
+    }
+  }
+  /^Declare[[:space:]]+(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
+    s//4 \1 \2/
+    p
+  }
+  /^(Const)[[:space:]]+([[:alnum:]_]+).*/I {
+    s//5 \1 \2/
+    p
+  }
+  /^([[:alnum:]_]+)[^[:space:]]*[[:space:]]+As[[:space:]].*/I {
+    s//5 Val \1/
+    p
+  }
 }
