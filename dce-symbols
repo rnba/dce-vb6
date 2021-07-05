@@ -36,10 +36,10 @@
     s//5 \1 \2/
     p
   }
-  /^([[:alnum:]_]+)[^[:space:]]*\s+As\s.*/I {
-    s//5 Val \1/
-    p
-  }
+  #/^([[:alnum:]_]+)[^[:space:]]*\s+As\s.*/I {
+  #  s//5 Val \1/
+  #  p
+  #}
 
   # it's something else.  next!
   b
