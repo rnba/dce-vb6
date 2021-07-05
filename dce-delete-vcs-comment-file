@@ -1,12 +1,22 @@
 #!/usr/bin/execlineb -WS1
 
+define comment "^[[:space:]]*('|Rem(\$|[[:space:]]))"
+
 sed -Eni "
-  /^[[:space:]]*'[[:space:]]*\\\$Workfile:/ {
-    :cruft
-    n
-    /^[[:space:]]*'/ b cruft
-    /^[[:space:]]*Rem[[:space:]]+/ b cruft
-    /^[[:space:]]*Rem[[:space:]]*\$/ b cruft
+  /${comment}/ b comment
+
+  p; b
+
+  :comment
+  H
+  n
+  /${comment}/ b comment
+
+  x
+  /\\\$(Archive|Revision|Workfile):/ {
+    x
   }
-  p
+
+  :other
+  p; n; b other
   " $1
