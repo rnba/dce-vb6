@@ -6,9 +6,9 @@ multisubstitute {
   importas -i n n
 }
 
-define import "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?Declare[[:space:]]+${t}[[:space:]]+${n}($|[^_[:alnum:]])"
-define const  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)Const[[:space:]]+${n}($|[^_[:alnum:]])"
-define proto  "^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?${t}[[:space:]]+([GS]et[[:space:]]+)?${n}($|[^_[:alnum:]])"
+define import "^\\s*(P(ublic|rivate)\\s+)?Declare\\s+${t}\\s+${n}\\>"
+define const  "^\\s*(P(ublic|rivate)\\s+)Const\\s+${n}\\>"
+define proto  "^\\s*(P(ublic|rivate)\\s+)?${t}\\s+([GS]et\\s+)?${n}\\>"
 
 exec sed -Eni "
   /^'.*/ {
@@ -56,7 +56,7 @@ exec sed -Eni "
   :def
   /${proto}/I {
     :dbody
-    /end[[:space:]]+${t}/I {
+    /end\\s+${t}/I {
       n; b tail
     }
     n; b dbody
@@ -66,7 +66,7 @@ exec sed -Eni "
   p; b
 
   :tail
-  /^[[:space:]]*$/ {
+  /^\\s*$/ {
     n; b tail;
   }
   b unrelated

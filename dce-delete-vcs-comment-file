@@ -1,6 +1,6 @@
 #!/usr/bin/execlineb -WS1
 
-define comment "^[[:space:]]*('|Rem(\$|[[:space:]]))"
+define comment "^\\s*('|Rem\\>)"
 
 sed -Eni "
   /${comment}/ b comment
@@ -13,7 +13,7 @@ sed -Eni "
   /${comment}/ b comment
 
   x
-  /\\\$(Archive|Revision|Workfile):/ {
+  /\\$(Archive|Revision|Workfile):/ {
     x
   }
 

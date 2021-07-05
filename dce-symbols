@@ -2,19 +2,19 @@
 
 /^\s*(P(ublic|rivate)\s+)?/ {
   s///
-  /^(Function|Sub)\s+([[:alnum:]_]+).*/I {
+  /^(Function|Sub)\s+(\w+).*/I {
     s//1 \1 \2/
     b block
   }
-  /^(Property)\s+[GS]et\s+([[:alnum:]_]+).*/I {
+  /^(Property)\s+[GS]et\s+(\w+).*/I {
     s//1 \1 \2/
     b block
   }
-  /^(Enum)\s+([[:alnum:]_]+).*/I {
+  /^(Enum)\s+(\w+).*/I {
     s//2 \1 \2/
     b block
   }
-  /^(Type)\s+([[:alnum:]_]+).*/I {
+  /^(Type)\s+(\w+).*/I {
     s//3 \1 \2/
     b block
   }
@@ -28,15 +28,15 @@
     H; x
   }
 
-  /^Declare\s+(Function|Sub)\s+([[:alnum:]_]+).*/I {
+  /^Declare\s+(Function|Sub)\s+(\w+).*/I {
     s//4 \1 \2/
     p
   }
-  /^(Const)\s+([[:alnum:]_]+).*/I {
+  /^(Const)\s+(\w+).*/I {
     s//5 \1 \2/
     p
   }
-  #/^([[:alnum:]_]+)[^[:space:]]*\s+As\s.*/I {
+  #/^(\w+)\S*\s+As\s.*/I {
   #  s//5 Val \1/
   #  p
   #}
