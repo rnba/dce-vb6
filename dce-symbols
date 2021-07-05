@@ -20,10 +20,10 @@
   }
 
   /_$/ {
-    h; n
+    s///; h; n
     :cont
     /_$/ {
-      H; n; b cont
+      s///; H; n; b cont
     }
     H; x
   }
