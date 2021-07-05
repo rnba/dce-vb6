@@ -7,28 +7,28 @@ multisubstitute {
 ifelse -n { test -f $file }
 {
   fdmove -c 2 1 dce-print -f {
-    "%s: not a file: %s\n" $F $file
+    "%s: not a file: %s\\n" $F $file
   }
   exit 1
 }
 ifelse -n { test -d .git }
 {
   fdmove -c 2 1 dce-print -f {
-    printf "%s: not a directory: .git\n" $F
+    printf "%s: not a directory: .git\\n" $F
   }
   exit 1
 }
 ifelse -n { git diff --quiet $file }
 {
   fdmove -c 2 1 dce-print -f {
-    printf "%s has changes in the worktree\n" $file
+    printf "%s has changes in the worktree\\n" $file
   }
   exit 1
 }
 ifelse -n { git diff --quiet --cached $file }
 {
   fdmove -c 2 1 dce-print -f {
-    printf "%s has changes in the index\n" $file
+    printf "%s has changes in the index\\n" $file
   }
   exit 2
 }

@@ -2,12 +2,12 @@
 
 importas -i 0 0
 
-dce-print -f { "\n[acCeqsS?] ? " }
+dce-print -f { "\\n[acCeqsS?] ? " }
 backtick -E x { sed -E 1q }
 dce-switch $x
 case ? {
   dce-print -f {
-    "%s: %s\n"
+    "%s: %s\\n"
       c "commit the proposal"
       C "commit the proposal with a custom message"
       e "edit files, then restart"

@@ -13,7 +13,7 @@ backtick -E F { basename $P }
 ifelse { test $# -lt 1 }
 {
   fdmove -c 2 1
-  dce-print -f { "usage: %s FILE\n" $F }
+  dce-print -f { "usage: %s FILE\\n" $F }
   exit 1
 }
 

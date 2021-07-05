@@ -8,7 +8,7 @@ multisubstitute {
 }
 if {
   redirfd -w 1 .git/msg
-  printf "%s: drop %s %s (%s)\n" $file $t $n $mode
+  printf "%s: drop %s %s (%s)\\n" $file $t $n $mode
 }
 if { git commit -aqF .git/msg $@ }
 dce-progress record
