@@ -1,53 +1,69 @@
 #!/usr/bin/sed -Enf
 
-/^[[:space:]]*(P(ublic|rivate)[[:space:]]+)?/ {
+/^\s*(P(ublic|rivate)\s+)?/ {
   s///
-  /^(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
+  /^(Function|Sub)\s+([[:alnum:]_]+).*/I {
     s//1 \1 \2/
-    p
-    /^. Function/I {
-      :Function
-      /^[[:space:]]*End[[:space:]]+Function/I! { n; b Function; }
-    }
-    /^. Sub/I {
-      :Sub
-      /^[[:space:]]*End[[:space:]]+Sub/I! { n; b Sub; }
-    }
+    b block
   }
-  /^(Property)[[:space:]]+[GS]et[[:space:]]+([[:alnum:]_]+).*/I {
+  /^(Property)\s+[GS]et\s+([[:alnum:]_]+).*/I {
     s//1 \1 \2/
-    p
-    /^. Property/I {
-      :Property
-      /^[[:space:]]*End[[:space:]]+Property/I! { n; b Property; }
-    }
+    b block
   }
-  /^(Enum)[[:space:]]+([[:alnum:]_]+).*/I {
+  /^(Enum)\s+([[:alnum:]_]+).*/I {
     s//2 \1 \2/
-    p
-    /^. Enum/I {
-      :Enum
-      /^[[:space:]]*End[[:space:]]+Enum/I! { n; b Enum; }
-    }
+    b block
   }
-  /^(Type)[[:space:]]+([[:alnum:]_]+).*/I {
+  /^(Type)\s+([[:alnum:]_]+).*/I {
     s//3 \1 \2/
-    p
-    /^. Type/I {
-      :Type
-      /^[[:space:]]*End[[:space:]]+Type/I! { n; b Type; }
-    }
+    b block
   }
-  /^Declare[[:space:]]+(Function|Sub)[[:space:]]+([[:alnum:]_]+).*/I {
+
+  /_$/ {
+    h; n
+    :cont
+    /_$/ {
+      H; n; b cont
+    }
+    H; x
+  }
+
+  /^Declare\s+(Function|Sub)\s+([[:alnum:]_]+).*/I {
     s//4 \1 \2/
     p
   }
-  /^(Const)[[:space:]]+([[:alnum:]_]+).*/I {
+  /^(Const)\s+([[:alnum:]_]+).*/I {
     s//5 \1 \2/
     p
   }
-  /^([[:alnum:]_]+)[^[:space:]]*[[:space:]]+As[[:space:]].*/I {
+  /^([[:alnum:]_]+)[^[:space:]]*\s+As\s.*/I {
     s//5 Val \1/
     p
+  }
+
+  # it's something else.  next!
+  b
+
+  :block
+  p
+  /^. Function/I {
+    :Function
+    /^\s*End\s+Function/I! { n; b Function; }
+  }
+  /^. Sub/I {
+    :Sub
+    /^\s*End\s+Sub/I! { n; b Sub; }
+  }
+  /^. Property/I {
+    :Property
+    /^\s*End\s+Property/I! { n; b Property; }
+  }
+  /^. Enum/I {
+    :Enum
+    /^\s*End\s+Enum/I! { n; b Enum; }
+  }
+  /^. Type/I {
+    :Type
+    /^\s*End\s+Type/I! { n; b Type; }
   }
 }
