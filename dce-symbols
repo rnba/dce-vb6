@@ -2,12 +2,17 @@
 
 /^\s*(P(ublic|rivate)\s+)?/ {
   s///
-  /^(Function|Sub)\s+(\w+).*/I {
+
+  /^(Function)\s+(\w+).*/I {
     s//1 \1 \2/
     b block
   }
-  /^(Property)\s+[GS]et\s+(\w+).*/I {
+  /^(Sub)\s+(\w+).*/I {
     s//1 \1 \2/
+    b block
+  }
+  /^(Property)\s+([GLS]et)\s+(\w+).*/I {
+    s//1 \1 \2 \3/
     b block
   }
   /^(Enum)\s+(\w+).*/I {
@@ -45,7 +50,7 @@
   b
 
   :block
-  p
+  h
   /^. Function/I {
     :Function
     /^\s*End\s+Function/I! { n; b Function; }
@@ -66,4 +71,5 @@
     :Type
     /^\s*End\s+Type/I! { n; b Type; }
   }
+  g; p
 }
