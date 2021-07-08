@@ -6,7 +6,7 @@ multisubstitute {
   define -s ignore "bmp doc jpeg jpg pdf rtf xls"
 }
 git grep -Pir $@
-  -e "\\b${n}\\b" --and --not -e "^('|Rem )"
+  -e "\\b${n}\\b" --and --not -e "^\\s*('|Rem )"
   --
   ":(exclude,icase)*.${ignore}"
   $dir
