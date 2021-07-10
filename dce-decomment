@@ -1,38 +1,37 @@
 #!/usr/bin/sed -Ef
 
+b main
+
+:error
+s/^/ERROR: /
+w /dev/stderr
+q 1
+
+:main
+
 # the "Rem" comment leader is dealt with
-# swiftly here: grep suggests that it's only
+# swiftly here: grep suggests it's only
 # used as the first token on a line
 # or inside a '-comment.
 
-# lines where the comment leader is the
-# first non-WS character are dropped
+# lines where either comment leader is
+# the first non-WS character are dropped
 # completely, no need to leave behind
 # /^\s+$/-matching junk...
 
-/^\s*('|Rem\>)/ d
-
 # but lines that were such a junk before
 # stay as is.  there's a shitton of that
-# out there, let's keep the diff focussed.
+# in the code this is written for,
+# so let's keep the diff focussed.
 
-/^\s*$/ b asis
-
-/('|\<Rem\>)/! b strip
+# now for the interesting bit.
 
 # the trouble with finding comments without
 # an actual lexer is in string literals:
 #
-#  s = "not a 'comment'!" ' let's party!
-#
-# first get the easy ones off the table:
+#  r = 42 ' this is trivial
+#  s = "not a 'comment'!" ' this isn't
 
-/^([^'"]*)('|\<Rem\>).*/ {
-  s//\1/
-  b strip
-}
-
-# now for the interesting bit.
 # we know that this line contains both
 # quotes (") and apostrophes ('),
 # and that the first quote comes before
@@ -45,11 +44,22 @@
 # as a marker, moving it just past
 # the next string literal on each pass.
 
+/^\s*('|Rem\>)/ d
+
+/^\s*$/ b asis
+
+/('|\<Rem\>)/! b asis
+
+/^([^'"]*)('|\<Rem\>).*/ {
+  s//\1/
+  b strip
+}
+
 s/^/\n/
-:strings
+:string
 /^(.*)\n([^'"]*"[^"]*")(.*)$/ {
   s//\1\2\n\3/
-  b strings
+  b string
 }
 
 # the \n is past all string literals.
@@ -58,10 +68,9 @@ s/^/\n/
   b strip
 }
 
-:error
-s/^/ERROR: /
-w /dev/stderr
-q 1
+# insurance policy against bugs
+:unhandled
+b error
 
 :strip
 s/\s+$//
