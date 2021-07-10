@@ -41,26 +41,22 @@
 # 
 #  "You're", "They're" ', "Your", "Their"
 #
-# 0x0 is illegal in vb6 code AFAICT,
-# so let's use it as a marker.
-# it moves just past the next string
-# literal on each pass.
+# pattern space is one line with the
+# linefeed removed, so let's use that
+# as a marker, moving it just past
+# the next string literal on each pass.
 
-s/^/\x0/
+s/^/\n/
 :strings
-/^(.*)\x0([^'"]*"[^"]*")(.*)$/ {
-  s//\1\2\x0\3/
-  tstrings
+/^(.*)\n([^'"]*"[^"]*")(.*)$/ {
+  s//\1\2\n\3/
+  bstrings
 }
 
-#h; s/\x0/\\x0/; s/^/DEBUG: /p; g
-
-# the \0 is past all string literals
-/^(.*)\x0([^']*)('.*)?/ {
+# the \n is past all string literals
+/^(.*)\n([^']*)('.*)?/ {
   s//\1\2/
-  tok
 }
-s/\x0//
 bok
 
 :error
