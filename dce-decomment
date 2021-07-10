@@ -1,13 +1,4 @@
-#!/usr/bin/sed -Ef
-
-b main
-
-:error
-s/^/ERROR: /
-w /dev/stderr
-q 1
-
-:main
+#!/usr/bin/sed -Ensf
 
 # the "Rem" comment leader is dealt with
 # swiftly here: grep suggests it's only
@@ -44,15 +35,12 @@ q 1
 # as a marker, moving it just past
 # the next string literal on each pass.
 
-/^\s*('|Rem\>)/ d
+/('|\<Rem\>)/! b print
 
-/^\s*$/ b asis
-
-/('|\<Rem\>)/! b asis
-
-/^([^'"]*)('|\<Rem\>).*/ {
-  s//\1/
-  b strip
+/^([^'"]*)(('|\<Rem\>).*)$/ {
+  h; s//\2/
+  x; s//\1/
+  b print
 }
 
 s/^/\n/
@@ -64,15 +52,28 @@ s/^/\n/
 
 # the \n is past all string literals.
 /^(.*)\n([^']*)('.*)?/ {
-  s//\1\2/
-  b strip
+  h; s//\3/
+  x; s//\1\2/
+  b print
 }
 
-# insurance policy against bugs
-:unhandled
-b error
+:print
+#=
+#s/^.*$/PSPACE=<&\>./p
+#s/^PSPACE=<(.*)>\./\1/; x
+#=
+#s/^.*$/HSPACE=<&\>./p; x
+#s/^HSPACE=<(.*)>\./\1/; x
 
-:strip
+x; /^'|Rem\>/! {
+  x; b asis
+}
+x; /\S/! b exit
+
 s/\s+$//
 
 :asis
+p
+
+:exit
+z; x; d
