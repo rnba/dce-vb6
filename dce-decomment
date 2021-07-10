@@ -1,16 +1,16 @@
-#!/usr/bin/sed -Enf
+#!/usr/bin/sed -Ef
 
 # the "Rem" comment leader is dealt with
 # swiftly here: grep suggests that it's only
 # used as the first token on a line
-# or inside a '-comment
+# or inside a '-comment.
 
 # lines where the comment leader is the
 # first non-WS character are dropped
 # completely, no need to leave behind
-# /^\s+$/-matching junk
+# /^\s+$/-matching junk...
 
-/^\s*('|Rem\>)/ b
+/^\s*('|Rem\>)/ d
 
 # but lines that were such a junk before
 # stay as is.  there's a shitton of that
@@ -52,7 +52,7 @@ s/^/\n/
   b strings
 }
 
-# the \n is past all string literals
+# the \n is past all string literals.
 /^(.*)\n([^']*)('.*)?/ {
   s//\1\2/
   b strip
@@ -67,4 +67,3 @@ q 1
 s/\s+$//
 
 :asis
-p
