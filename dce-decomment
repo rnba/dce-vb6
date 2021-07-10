@@ -5,8 +5,18 @@
 # used as the first token on a line
 # or inside a '-comment
 
+# lines where the comment leader is the
+# first non-WS character are dropped
+# completely, no need to leave behind
+# /^\s+$/-matching junk
+
 /^\s*'/b
 /^\s*Rem\>/b
+
+# but lines that were such a junk before
+# stay as is.  there's a shitton of that
+# out there, let's keep the diff focussed.
+
 /^\s*$/ { p; b; }
 
 /('|\<Rem\>)/!bok
@@ -30,6 +40,11 @@
 # the first apostrophe.
 # 
 #  "You're", "They're" ', "Your", "Their"
+#
+# 0x0 is illegal in vb6 code AFAICT,
+# so let's use it as a marker.
+# it moves just past the next string
+# literal on each pass.
 
 s/^/\x0/
 :strings
