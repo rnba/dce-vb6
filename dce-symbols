@@ -1,75 +1,83 @@
 #!/usr/bin/sed -Enf
 
-/^\s*(P(ublic|rivate)\s+)?/ {
+# ignore comments
+/^\s*(\<rem\>|').*/Id
+s/\s*(\<rem\>|').*//i
+
+s/\s+$//
+
+# join blocks of lines ending in "_"...
+/(^|\s+)_$/ {
   s///
-
-  /^(Function)\s+(\w+).*/I {
-    s//1 \1 \2/
-    b block
-  }
-  /^(Sub)\s+(\w+).*/I {
-    s//1 \1 \2/
-    b block
-  }
-  /^(Property)\s+([GLS]et)\s+(\w+).*/I {
-    s//1 \1 \2 \3/
-    b block
-  }
-  /^(Enum)\s+(\w+).*/I {
-    s//2 \1 \2/
-    b block
-  }
-  /^(Type)\s+(\w+).*/I {
-    s//3 \1 \2/
-    b block
-  }
-
-  /_$/ {
-    s///; h; n
-    :cont
-    /_$/ {
-      s///; H; n; b cont
-    }
-    H; x
-  }
-
-  /^Declare\s+(Function|Sub)\s+(\w+).*/I {
-    s//4 \1 \2/
-    p
-  }
-  /^(Const)\s+(\w+).*/I {
-    s//5 \1 \2/
-    p
-  }
-  #/^(\w+)\S*\s+As\s.*/I {
-  #  s//5 Val \1/
-  #  p
-  #}
-
-  # it's something else.  next!
+  N
   b
-
-  :block
-  h
-  /^. Function/I {
-    :Function
-    /^\s*End\s+Function/I! { n; b Function; }
-  }
-  /^. Sub/I {
-    :Sub
-    /^\s*End\s+Sub/I! { n; b Sub; }
-  }
-  /^. Property/I {
-    :Property
-    /^\s*End\s+Property/I! { n; b Property; }
-  }
-  /^. Enum/I {
-    :Enum
-    /^\s*End\s+Enum/I! { n; b Enum; }
-  }
-  /^. Type/I {
-    :Type
-    /^\s*End\s+Type/I! { n; b Type; }
-  }
-  g; p
 }
+# ... ending with one which doesn't
+
+# replace newlines inserted by N
+s/\n/ /g
+
+s/^\s*//
+s/^(public|private)\s+//i
+
+s/\s+/ /g
+
+# ignore bodies, we only want file-level stuff
+/^(function|sub|enum|type|property [gls]et) (\w+).*/I {
+  s//\1 \2/
+  h
+  # now we have "Function fX" or "Property Get gY"
+  # also saved in hold space
+  :n
+  $ {
+    g
+    s/.*/error: '&' without an 'end' statement/
+    w /dev/stderr
+    q 1
+  }
+  N
+  # now we have "Function fX\nNEXTLINE"
+  # we're looking for "End Function"
+  /^(\w+) .+\nend \1$/I {
+    # "Function fX\nEnd Function"
+    #    (\w+)             \1
+    z; x;
+    bp
+  }
+  g
+  bn
+}
+
+/^(declare) (function|sub) (\w+).*/I {
+  s//\1 \2 \3/
+  bp
+}
+
+/^(const) (\w+).*/I {
+  s//\1 \2/
+  bp
+}
+
+/^(\w+)(\([[:digit:]]+\))? as\>.*/I {
+  s//var \1/
+  bp
+}
+
+b
+
+:p
+s/^(.+) (\w+)$/\L\1\E \2/
+s/\<function\>/fun/
+s/^property /p/
+s/^declare /d/
+
+s/^f/1 &/
+s/^s/1 &/
+s/^p/1 &/
+s/^e/2 &/
+s/^t/3 &/
+s/^d/4 &/
+s/^c/5 &/
+s/^v/5 &/
+
+p
