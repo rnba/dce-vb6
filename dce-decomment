@@ -10,16 +10,15 @@
 # completely, no need to leave behind
 # /^\s+$/-matching junk
 
-/^\s*'/b
-/^\s*Rem\>/b
+/^\s*('|Rem\>)/ b
 
 # but lines that were such a junk before
 # stay as is.  there's a shitton of that
 # out there, let's keep the diff focussed.
 
-/^\s*$/ { p; b; }
+/^\s*$/ b asis
 
-/('|\<Rem\>)/!bok
+/('|\<Rem\>)/! b strip
 
 # the trouble with finding comments without
 # an actual lexer is in string literals:
@@ -30,7 +29,7 @@
 
 /^([^'"]*)('|\<Rem\>).*/ {
   s//\1/
-  bok
+  b strip
 }
 
 # now for the interesting bit.
@@ -50,20 +49,22 @@ s/^/\n/
 :strings
 /^(.*)\n([^'"]*"[^"]*")(.*)$/ {
   s//\1\2\n\3/
-  bstrings
+  b strings
 }
 
 # the \n is past all string literals
 /^(.*)\n([^']*)('.*)?/ {
   s//\1\2/
+  b strip
 }
-bok
 
 :error
 s/^/ERROR: /
 w /dev/stderr
 q 1
 
-:ok
+:strip
 s/\s+$//
+
+:asis
 p
