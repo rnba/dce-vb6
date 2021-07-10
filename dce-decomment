@@ -1,0 +1,58 @@
+#!/usr/bin/sed -Enf
+
+# the "Rem" comment leader is dealt with
+# swiftly here: grep suggests that it's only
+# used as the first token on a line
+# or inside a '-comment
+
+/^\s*'/b
+/^\s*Rem\>/b
+/^\s*$/ { p; b; }
+
+/('|\<Rem\>)/!bok
+
+# the trouble with finding comments without
+# an actual lexer is in string literals:
+#
+#  s = "not a 'comment'!" ' let's party!
+#
+# first get the easy ones off the table:
+
+/^([^'"]*)('|\<Rem\>).*/ {
+  s//\1/
+  bok
+}
+
+# now for the interesting bit.
+# we know that this line contains both
+# quotes (") and apostrophes ('),
+# and that the first quote comes before
+# the first apostrophe.
+# 
+#  "You're", "They're" ', "Your", "Their"
+
+s/^/\x0/
+:strings
+/^(.*)\x0([^'"]*"[^"]*")(.*)$/ {
+  s//\1\2\x0\3/
+  tstrings
+}
+
+#h; s/\x0/\\x0/; s/^/DEBUG: /p; g
+
+# the \0 is past all string literals
+/^(.*)\x0([^']*)('.*)?/ {
+  s//\1\2/
+  tok
+}
+s/\x0//
+bok
+
+:error
+s/^/ERROR: /
+w /dev/stderr
+q 1
+
+:ok
+s/\s+$//
+p
