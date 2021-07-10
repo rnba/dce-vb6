@@ -10,7 +10,7 @@
 # completely, no need to leave behind
 # /^\s+$/-matching junk...
 
-# but lines that were such a junk before
+# but lines that were such junk before
 # stay as is.  there's a shitton of that
 # in the code this is written for,
 # so let's keep the diff focussed.
