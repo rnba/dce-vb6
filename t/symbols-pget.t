@@ -5,7 +5,7 @@
 
 trivial::
 
-  $ cat > x.bas <<\EOF
+  $ cat > trivial.bas <<\EOF
   > Property Get p1() As Long
   >   p1 = 42
   > End Property
@@ -15,14 +15,14 @@ trivial::
   > End Property
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-symbols trivial.bas
   1 pget p1
   1 pget p2
 
 
   multiline::
 
-  $ cat > x.bas <<\EOF
+  $ cat > multiline.bas <<\EOF
   > Property Get _
   > p1() _
   > As Long
@@ -40,6 +40,6 @@ trivial::
   >   Property
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-symbols multiline.bas
   1 pget p1
   1 pget p2

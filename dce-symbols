@@ -40,9 +40,13 @@ s/\s+/ /g
   }
   # now we have "Function fX\nNEXTLINE"
   # we're looking for "End Function"
-  /^(\w+) \S+\nend\s\1$/I {
+  /^(\w+) \S+\s+end\s+\1$/I {
     # "Function fX\nEnd Function"
     #    (\w+)             \1
+    z; x;
+    bp
+  }
+  /^(property) \w+ \S+\s+end\s+\1$/I {
     z; x;
     bp
   }
