@@ -1,73 +1,38 @@
 #!/usr/bin/sed -Ensf
 
 # the "Rem" comment leader is dealt with
-# swiftly here: grep suggests it's only
-# used as the first token on a line
-# or inside a '-comment.
+# swiftly: grep shows it's only used
+# as the first token on a line or inside
+# a '-comment.
 
 # lines where either comment leader is
 # the first non-WS character are dropped
-# completely, no need to leave behind
-# /^\s+$/-matching junk...
+# completely.
 
-# but lines that were such junk before
-# stay as is.  there's a shitton of that
-# in the code this is written for,
-# so let's keep the diff focussed.
+x; z; x
 
-# now for the interesting bit.
+/('|\<Rem\>)/! b asis
 
-# the trouble with finding comments without
-# an actual lexer is in string literals:
-#
-#  r = 42 ' this is trivial
-#  s = "not a 'comment'!" ' this isn't
-
-# we know that this line contains both
-# quotes (") and apostrophes ('),
-# and that the first quote comes before
-# the first apostrophe.
-# 
-#  "You're", "They're" ', "Your", "Their"
-#
-# pattern space is one line with the
-# linefeed removed, so let's use that
-# as a marker, moving it just past
-# the next string literal on each pass.
-
-/('|\<Rem\>)/! b print
-
-/^([^'"]*)(('|\<Rem\>).*)$/ {
-  h; s//\2/
-  x; s//\1/
+/^(\s*)(('|\<Rem\>).*)/ {
+  h; s//\1/;
+  x; s//\2/
   b print
 }
 
-s/^/\n/
-:string
-/^(.*)\n([^'"]*"[^"]*")(.*)$/ {
-  s//\1\2\n\3/
-  b string
+/^([^'"]*\s)('.*)$/ {
+  h; s//\1/;
+  x; s//\2/
+  b print
 }
 
-# the \n is past all string literals.
-/^(.*)\n([^']*)('.*)?/ {
-  h; s//\3/
-  x; s//\1\2/
+/^(([^'"]*"[^"]*")*[^'"]*)('.*)?$/ {
+  h; s//\1/;
+  x; s//\3/
   b print
 }
 
 :print
-#=
-#s/^.*$/PSPACE=<&\>./p
-#s/^PSPACE=<(.*)>\./\1/; x
-#=
-#s/^.*$/HSPACE=<&\>./p; x
-#s/^HSPACE=<(.*)>\./\1/; x
 
-x; /^'|Rem\>/! {
-  x; b asis
-}
 x; /\S/! b exit
 
 s/\s+$//
@@ -76,4 +41,3 @@ s/\s+$//
 p
 
 :exit
-z; x; d
