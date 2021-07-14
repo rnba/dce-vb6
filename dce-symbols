@@ -16,7 +16,7 @@ s/\n/ /g
 s/\s+$//
 
 s/^\s*//
-s/^(public|private)\s+//i
+s/^(public|private|static)\s+//i
 
 s/\s+/ /g
 
@@ -56,8 +56,8 @@ s/\s+/ /g
   bp
 }
 
-/^(\w+)(\([[:digit:]]+\))? as\>.*/I {
-  s//var \1/
+/^(dim )?(\w+)(\([[:digit:]]+\))? as\>.*/I {
+  s//var \2/
   bp
 }
 
