@@ -1,4 +1,4 @@
-#!/usr/bin/execlineb -Ws1
+#!/usr/bin/execlineb -Wp
 
 multisubstitute {
   importas -i file file
@@ -32,4 +32,4 @@ ifelse -n { git diff --quiet --cached $file }
   exit 2
 }
 
-exec $@
+runblock -r 0
