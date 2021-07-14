@@ -8,6 +8,7 @@ if {
   export mode $1
   forbacktickx -Eo 0 x { dce-names }
     multidefine $x { t n }
+    dce-print { dce-prune: t=${t} n=${n} }
     export t $t
     export n $n
     dce-process
