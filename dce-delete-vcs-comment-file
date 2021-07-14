@@ -1,49 +1,48 @@
 #!/usr/bin/sed -Ensf
 
-# read a line
+# this is supposed to delete the
+# comment many modules have in them
+# listing the prehistory of the file
+# in some other version control system.
 #
-# if it's not a comment:
-  # if there's stuff in hold:
-    # print it
-    # delete the holdspace
-  # print the current line
-  # start from top with the next line
-# else (it's a comment):
-  # if it does not have the keywords:
-    # if this is the last line:
-      # print it
-    # else:
-      # hold it
-    # start from top with the next line
-  # else (it has the keywords):
-    # drop it,
-    # eat the rest of the comment,
-    # eat empty lines after it,
-    # print the rest of the file
+# other comments stay put.
 
+# not (our kind of) comment line.
 /^\s*('|Rem\>)/! {
-  x; /./ { s/^\n//p; z; }
+  :thatwasntit
+  # print back the hold space
+  # and empty it
+  x; /./s/^\n//p; z;
+  # print the current line
   x; p
+  # restart with the next line if any
   b
 }
 
+# a comment line, but without the keywords
 /\$Workfile:/! {
-  $  p
-  $! H;
-  b
+  # last line? end of search.
+  $ b thatwasntit;
+  # there's still hope.
+  # add it to hold space and go on.
+  H; b
 }
 
-n
+# if we got here then it's a comment line
+# and has one of the keywords in it.
 
+# eat the rest of this comment block,
 :comment
 /^\s*(('|Rem\>).*)$/ {
   n; b comment
 }
 
+# eat empty lines following it if any,
 :empty
 /^\s*$/ {
   n; b empty
 }
 
+# and print the rest of the file.
 :rest
 p; n; b rest
