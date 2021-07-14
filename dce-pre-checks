@@ -1,34 +1,33 @@
 #!/usr/bin/execlineb -Ws1
 
 multisubstitute {
-  define F $1
   importas -i file file
 }
 ifelse -n { test -f $file }
 {
   fdmove -c 2 1 dce-print -f {
-    "%s: not a file: %s\\n" $F $file
+    "dce-vb6: not a file: %s\\n" $file
   }
   exit 1
 }
 ifelse -n { test -d .git }
 {
   fdmove -c 2 1 dce-print -f {
-    "%s: not a directory: .git\\n" $F
+    "dce-vb6: not a directory: .git\\n"
   }
   exit 1
 }
 ifelse -n { git diff --quiet $file }
 {
   fdmove -c 2 1 dce-print -f {
-    "%s has changes in the worktree\\n" $file
+    "dce-vb6: %s has changes in the worktree\\n" $file
   }
   exit 1
 }
 ifelse -n { git diff --quiet --cached $file }
 {
   fdmove -c 2 1 dce-print -f {
-    "%s has changes in the index\\n" $file
+    "dce-vb6: %s has changes in the index\\n" $file
   }
   exit 2
 }

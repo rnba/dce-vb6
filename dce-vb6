@@ -8,12 +8,11 @@ multisubstitute {
 }
 backtick -E P { realpath $0 }
 backtick -E D { dirname $P }
-backtick -E F { basename $P }
 
 ifelse { test $# -lt 1 }
 {
   fdmove -c 2 1
-  dce-print -f { "usage: %s FILE\\n" $F }
+  dce-print -f { "usage: dce-vb6 FILE\\n" }
   exit 1
 }
 
@@ -33,7 +32,7 @@ export sd $sd
 
 export PATH ${D}:${PATH}
 exec
-dce-pre-checks $F
+dce-pre-checks
 if { mkdir -p $fd $sd }
 dce-delete-vcs-comment $file
 dce-prune automatic
