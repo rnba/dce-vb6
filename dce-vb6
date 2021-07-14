@@ -34,7 +34,7 @@ export PATH ${D}:${PATH}
 exec
 dce-pre-checks
 if { mkdir -p $fd $sd }
-dce-delete-vcs-comment $file
+dce-vcs-comment $file
 dce-prune automatic
 dce-prune interactive
 exit
