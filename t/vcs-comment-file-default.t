@@ -7,12 +7,12 @@
 
 no argument, no action::
 
-  $ dce-delete-vcs-comment-file
+  $ dce-vcs-comment-file
 
 
 result goes to stdout::
 
-  $ dce-delete-vcs-comment-file present.bas
+  $ dce-vcs-comment-file present.bas
   ' this stays in
   Attribute VB_Name = "present"
   
@@ -29,7 +29,7 @@ leaves $1 unchanged::
 
 no VCS comment, no action::
 
-  $ dce-delete-vcs-comment-file absent.bas
+  $ dce-vcs-comment-file absent.bas
   ' this stays in
   Attribute VB_Name = "absent"
   

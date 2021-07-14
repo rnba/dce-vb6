@@ -8,12 +8,12 @@
 
 ::
 
-  $ dce-delete-vcs-comment-git
+  $ dce-vcs-comment-git
   execlineb: fatal: too few arguments: expecting at least 1 but got 0
   [100]
 
   $ echo >> a/foo.bas
-  $ dce-delete-vcs-comment-git a/foo.bas true
+  $ dce-vcs-comment-git a/foo.bas true
 
   $ git log
   commit f1c88526a39420607902a2a4d1d42114bf5349c3

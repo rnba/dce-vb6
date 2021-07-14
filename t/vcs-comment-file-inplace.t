@@ -7,14 +7,14 @@
 
 no argument -> complaint::
 
-  $ ! dce-delete-vcs-comment-file -i 2>stderr
+  $ ! dce-vcs-comment-file -i 2>stderr
   $ cat stderr
   * no input files (glob)
 
 
 -i changes the file:
 
-  $ dce-delete-vcs-comment-file -i present.bas
+  $ dce-vcs-comment-file -i present.bas
 
   $ cat present.bas
   ' this stays in
@@ -28,7 +28,7 @@ no argument -> complaint::
 
 no VCS comment, no action::
 
-  $ dce-delete-vcs-comment-file -i absent.bas
+  $ dce-vcs-comment-file -i absent.bas
 
   $ cat absent.bas
   ' this stays in
