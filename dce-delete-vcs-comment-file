@@ -2,51 +2,48 @@
 
 # read a line
 #
-# if it's a comment:
+# if it's not a comment:
+  # if there's stuff in hold:
+    # print it
+    # delete the holdspace
+  # print the current line
+  # start from top with the next line
+# else (it's a comment):
   # if it does not have the keywords:
     # if this is the last line:
       # print it
-    # else
+    # else:
       # hold it
-  # else (if it has the keywords):
+    # start from top with the next line
+  # else (it has the keywords):
     # drop it,
     # eat the rest of the comment,
     # eat empty lines after it,
     # print the rest of the file
-# else (if it's not a comment):
-  # if there's stuff in hold:
-  #   print it
-  # delete the holdspace
-  # print the current line
-
-/^\s*('|Rem\>)/ {
-  /\$Workfile:/! {
-    $  p
-    $! H;
-  }
-  /\$Workfile:/ {
-    n
-
-    :eatcomment
-    /^\s*(('|Rem\>).*)$/ {
-      n
-      b eatcomment
-    }
-
-    :eatempties
-    /^\s*$/ {
-      n
-      b eatempties
-    }
-
-    :rest
-    p; n; b rest
-  }
-}
 
 /^\s*('|Rem\>)/! {
-  x; /./s/^\n//p;
-  z;
+  x; /./ { s/^\n//p; z; }
   x; p
+  b
 }
 
+/\$Workfile:/! {
+  $  p
+  $! H;
+  b
+}
+
+n
+
+:comment
+/^\s*(('|Rem\>).*)$/ {
+  n; b comment
+}
+
+:empty
+/^\s*$/ {
+  n; b empty
+}
+
+:rest
+p; n; b rest
