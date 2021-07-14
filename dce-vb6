@@ -31,11 +31,10 @@ export d $d
 export fd $fd
 export sd $sd
 
-if { mkdir -p $fd $sd }
-
 export PATH ${D}:${PATH}
 exec
 dce-pre-checks $F
+if { mkdir -p $fd $sd }
 dce-delete-vcs-comment $file
 dce-prune automatic
 dce-prune interactive
