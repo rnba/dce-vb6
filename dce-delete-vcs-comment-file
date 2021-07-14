@@ -3,22 +3,27 @@
 # read a line
 #
 # if it's a comment:
-  # if it has the keywords:
+  # if it does not have the keywords:
+    # if this is the last line:
+      # print it
+    # else
+      # hold it
+  # else (if it has the keywords):
     # drop it,
     # eat the rest of the comment,
     # eat empty lines after it,
     # print the rest of the file
-  # else, if it does not:
-    # hold it
-  # if this is the last line:
-    # print it
-# else, if it's not a comment:
+# else (if it's not a comment):
   # if there's stuff in hold:
   #   print it
   # delete the holdspace
   # print the current line
 
 /^\s*('|Rem\>)/ {
+  /\$Workfile:/! {
+    $  p
+    $! H;
+  }
   /\$Workfile:/ {
     n
 
@@ -37,10 +42,6 @@
     :rest
     p; n; b rest
   }
-  /\$Workfile:/! {
-    H;
-  }
-  $ p
 }
 
 /^\s*('|Rem\>)/! {
