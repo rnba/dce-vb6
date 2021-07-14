@@ -34,9 +34,13 @@ s/\s+/ /g
     q 1
   }
   N
+  /\s+_$/ {
+    s///
+    bn
+  }
   # now we have "Function fX\nNEXTLINE"
   # we're looking for "End Function"
-  /^(\w+) .+\nend \1$/I {
+  /^(\w+) \S+\nend\s\1$/I {
     # "Function fX\nEnd Function"
     #    (\w+)             \1
     z; x;
