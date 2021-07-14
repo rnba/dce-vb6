@@ -1,0 +1,80 @@
+#!/usr/bin/sed -Enf
+
+#i INPUT LINE:
+#l
+
+:start
+
+:ws
+s/^\s+//
+s/^/\n/
+:more
+/\n([^"[:blank:]]+)\s+/ {
+  s//\1 \n/
+  b more
+}
+s/\n//
+s/\s+$//
+#s/^\s+//; s/\s+$//; /^$/ bempty
+
+/(^|\s+)_$/ {
+  $ blastline
+  s///
+  /^$/ b
+
+  x
+  # if HS (now PS) has anything
+  # in it, append PS (now HS)
+  # to it and store the result
+  # in HS.
+  # otherwise we're done:
+  # PS is now HS.
+  /\S/ { G; h; }
+  bx
+}
+
+# is there anything in HS?
+x
+/\S/ {
+  # yes, there's stuff in HS.
+  # append current line to it
+  # and work with the result.
+  # also, we're done with the
+  # HS, so zap it.
+  G; s/\n\s*/ /g; x; z
+}
+x
+
+#s/.*/L:<&>./
+
+p
+
+
+b
+
+:lastline
+s/^/ERROR: last line ends with underscore:\n\n/
+w /dev/stderr
+q 1
+
+:x
+##i PATTERN SPACE:
+##l
+#x;
+##i HOLD SPACE BEFORE:
+##l
+#s/^$/(empty)/
+#s/^/HOLD: /;
+#s/\n/\\n\n      /g
+#p;
+#s/^HOLD: //;
+#s/^\(empty\)$//
+#s/\\n\n      /\n/g
+##i HOLD SPACE AFTER:
+##l
+#x;
+
+b
+
+:empty
+s/^$/(empty input)/p
