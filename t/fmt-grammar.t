@@ -100,9 +100,18 @@ comparisons::
 ::
 
   $ dce-fmt <<\EOF
+  > Call db.execute(  "proc"  , arg )
+  > EOF
+  Call db.execute("proc", arg)
+
+
+::
+
+  $ dce-fmt <<\EOF
   > RaiseEvent Error( E.Number , E.Description )
   > EOF
   RaiseEvent Error(E.Number, E.Description)
+
 
 ::
 
@@ -118,7 +127,6 @@ comparisons::
   > s = f(  "   "   )
   > EOF
   s = f("   ")
-
 
 
 ::

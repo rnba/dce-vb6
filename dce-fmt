@@ -30,7 +30,7 @@ x
 s/^\s*//
 
 /^((\w+\.)*\w+\$?)/ {
-  h; s//<\1>\\n/; w fmt.log
+  h; s//[S]<\1>\\n/; w fmt.log
   g; s//\1 \n/
 }
 :again
