@@ -35,9 +35,17 @@
 ::
 
   $ dce-fmt <<\EOF
-  > x = 42
+  > x  =  y
   > EOF
-  x = 42
+  x = y
+
+
+floats::
+
+  $ dce-fmt <<\EOF
+  > x = 42.69
+  > EOF
+  x = 42.69
 
 
 hex (short)::
