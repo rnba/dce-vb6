@@ -2,6 +2,11 @@
 
   $ . $TESTDIR/Setup
 
+  $ : || function dce-fmt
+  > {
+  >   command dce-fmt
+  >   grep -F 'goodbye' fmt.log || :
+  > }
 
 ::
 
@@ -54,37 +59,37 @@ hex (long)::
 infix operators::
 
   $ dce-fmt <<\EOF
-  > x + 10
-  > x - 10
-  > x * 10
-  > x / 10
-  > x \ 10
-  > x ^ 10
+  > r = x + 10
+  > r = x - 10
+  > r = x * 10
+  > r = x / 10
+  > r = x \ 10
+  > r = x ^ 10
   > 
-  > x < 10
-  > x > 10
-  > x <= 10
-  > x >= 10
+  > r = x < 10
+  > r = x > 10
+  > r = x <= 10
+  > r = x >= 10
   > 
-  > x & y
-  > x & "  hello  "
-  > "  hello  " & "  goodbye  "
+  > r = x  &  y
+  > r = x  &  "  hello  "
+  > r = "  hello  "  &  "  goodbye  "
   > EOF
-  x + 10
-  x - 10
-  x * 10
-  x / 10
-  x \ 10
-  x ^ 10
+  r = x + 10
+  r = x - 10
+  r = x * 10
+  r = x / 10
+  r = x \ 10
+  r = x ^ 10
   
-  x < 10
-  x > 10
-  x <= 10
-  x >= 10
+  r = x < 10
+  r = x > 10
+  r = x <= 10
+  r = x >= 10
   
-  x & y
-  x & "  hello  "
-  "  hello  " & "  goodbye  "
+  r = x & y
+  r = x & "  hello  "
+  r = "  hello  " & "  goodbye  "
 
 
 ::
