@@ -60,11 +60,6 @@ s/\n\s*/\n /
   g; s//\1\2 \n/
   b again
 }
-/(\S+) \n (,)/ {
-  h; s//[S ,]<\1>\\n<\2> /; w fmt.log
-  g; s//\1 \2 \n/
-  b again
-}
 /(\S+) \n (#\w+|((\w+\.)+|\.)?\w+\$?)/ {
   h; s//[S w]<\1>\\n<\2> /; w fmt.log
   g; s//\1 \2 \n/
@@ -72,6 +67,11 @@ s/\n\s*/\n /
 }
 /(\S+) \n (&H[[:xdigit:]]+&?)/ {
   h; s//[S \&H]<\1>\\n<\2> /; w fmt.log
+  g; s//\1 \2 \n/
+  b again
+}
+/(\S+) \n (,)/ {
+  h; s//[S ,]<\1>\\n<\2> /; w fmt.log
   g; s//\1 \2 \n/
   b again
 }
