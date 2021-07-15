@@ -100,6 +100,13 @@ comparisons::
 ::
 
   $ dce-fmt <<\EOF
+  > RaiseEvent Error( E.Number , E.Description )
+  > EOF
+  RaiseEvent Error(E.Number, E.Description)
+
+::
+
+  $ dce-fmt <<\EOF
   > f ( x , , 10 )
   > EOF
   f(x, , 10)
@@ -128,6 +135,17 @@ comparisons::
   > Debug.Print s1; " = "; s2
   > EOF
   Debug.Print s1; " = "; s2
+
+
+::
+
+  $ dce-fmt <<\EOF
+  > Open fn For Output As #p
+  > Print #p, str
+  > EOF
+  Open fn For Output As #p
+  Print #p, str
+
 
 ::
 
