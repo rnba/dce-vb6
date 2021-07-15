@@ -108,6 +108,15 @@ comparisons::
 ::
 
   $ dce-fmt <<\EOF
+  > s = f(  "   "   )
+  > EOF
+  s = f("   ")
+
+
+
+::
+
+  $ dce-fmt <<\EOF
   > s = String(10, " ")
   > EOF
   s = String(10, " ")
