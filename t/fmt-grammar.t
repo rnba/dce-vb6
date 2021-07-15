@@ -51,7 +51,7 @@ hex (long)::
   x = &HFF00&
 
 
-arithmetic::
+infix operators::
 
   $ dce-fmt <<\EOF
   > x + 10
@@ -60,6 +60,15 @@ arithmetic::
   > x / 10
   > x \ 10
   > x ^ 10
+  > 
+  > x < 10
+  > x > 10
+  > x <= 10
+  > x >= 10
+  > 
+  > x & y
+  > x & "  hello  "
+  > "  hello  " & "  goodbye  "
   > EOF
   x + 10
   x - 10
@@ -67,20 +76,15 @@ arithmetic::
   x / 10
   x \ 10
   x ^ 10
-
-
-comparisons::
-
-  $ dce-fmt <<\EOF
-  > x < 10
-  > x > 10
-  > x <= 10
-  > x >= 10
-  > EOF
+  
   x < 10
   x > 10
   x <= 10
   x >= 10
+  
+  x & y
+  x & "  hello  "
+  "  hello  " & "  goodbye  "
 
 
 ::
