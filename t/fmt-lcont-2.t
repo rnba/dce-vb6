@@ -16,3 +16,5 @@ test::
 
   $ dce-fmt proto.bas
   Private Function f(ByVal j As Long, ByVal k As Long) As String
+
+  $ : cat fmt.log
