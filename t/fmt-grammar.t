@@ -59,12 +59,14 @@ arithmetic::
   > x * 10
   > x / 10
   > x \ 10
+  > x ^ 10
   > EOF
   x + 10
   x - 10
   x * 10
   x / 10
   x \ 10
+  x ^ 10
 
 
 comparisons::
