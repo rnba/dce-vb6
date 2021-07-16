@@ -1,0 +1,5 @@
+#!/usr/bin/execlineb -Ws1
+
+pipeline -w { cat -A }
+pipeline { printf $1 }
+dce-lex

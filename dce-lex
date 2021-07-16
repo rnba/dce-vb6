@@ -1,0 +1,49 @@
+#!/usr/bin/sed -Esf
+
+b main
+
+{
+  :lex
+  s//\1\x1f\2\x15/
+  b next
+}
+
+:main
+s/^/\x1e\x15/
+
+:next
+# comments
+/(.)\x15('.*)/     b lex
+/(.)\x15(Rem\>.*)/ b lex
+
+# whitespace
+/(.)\x15(\s+)/     b lex
+
+# hex numbers
+/(.)\x15(&H[[:xdigit:]]+&?)/ b lex
+
+# directives must come at line start
+/(\x1e)\x15(#(Const|If|Else|ElseIf))/ b lex
+
+# file handles
+/(.)\x15(#\w+)/ b lex
+
+# identifiers and keywords
+/(.)\x15(\.?(\w+\.)*\w+[%\$]?)/     b lex
+
+# operators
+/(.)\x15([:<>]=|<>|[-+*/\\^=&:<>])/ b lex
+
+# separators
+/(.)\x15([,:;()])/ b lex
+
+# string literals
+/(.)\x15("[^"]*")/ b lex
+
+/.*\x15(.+)$/ {
+  h; s//\1/; s/^/dce-lex: this not tokenized:\n/
+  w /dev/stderr
+  g; p
+  Q 1
+}
+

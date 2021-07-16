@@ -11,6 +11,11 @@ export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
 
 set +o noclobber
 
+test-lex()
+{
+  $TESTDIR/test-lex "$@"
+}
+
 displaypath()
 {
   case $1 in
