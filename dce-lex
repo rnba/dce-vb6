@@ -1,0 +1,73 @@
+#!/usr/bin/sed -Esf
+#
+# just enough of a VB6 lexer to support
+# the needs of this toolset, which has
+# a specific purpose.
+#
+# each line of output represents a physical line
+# of input.  format of output lines is (top-down
+# as if left-to-right):
+# 0x1E (RS, record separator)
+# 0x1F (US, unit separator)
+# VBtoken
+# 0x1F
+# VBtoken
+# ...
+# 0x15 (NAK, negative ack.)
+# LexFailure
+# 0x0A (LF, line feed, aka newline)
+# where
+# - VBtoken is any part of input this tool
+#   considers a VB6 token / lexeme
+# - LexFailure is the suffix of the input line
+#   this tool failed to recognize, if any
+# - 0x1E, 0x15 are always present, even if
+#   the input line was empty
+
+b main
+
+{
+  :lex
+  s//\1\x1f\2\x15/
+  b next
+}
+
+:main
+s/^/\x1e\x15/
+
+:next
+# comments
+/(.)\x15('.*)/     b lex
+/(.)\x15(Rem\>.*)/ b lex
+
+# whitespace
+/(.)\x15(\s+)/     b lex
+
+# hex numbers
+/(.)\x15(&H[[:xdigit:]]+&?)/ b lex
+
+# directives must come at line start
+/(\x1e)\x15(#(Const|If|Else|ElseIf))/ b lex
+
+# file handles
+/(.)\x15(#\w+)/ b lex
+
+# identifiers and keywords
+/(.)\x15(\.?(\w+\.)*\w+[%\$]?)/     b lex
+
+# operators
+/(.)\x15([:<>]=|<>|[-+*/\\^=&:<>])/ b lex
+
+# separators
+/(.)\x15([,:;()])/ b lex
+
+# string literals
+/(.)\x15("[^"]*")/ b lex
+
+/.*\x15(.+)$/ {
+  h; s//\1/; s/^/dce-lex: this not tokenized:\n/
+  w /dev/stderr
+  g; p
+  Q 1
+}
+
