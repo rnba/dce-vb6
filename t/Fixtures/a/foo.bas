@@ -22,7 +22,7 @@ Option Explicit
 Private Declare Function fnat11 Lib "haw.dll" (x As Long) As Long
 ' snat11
 Private Declare Sub snat11 Lib "haw.dll" (x As Long)
-Private Declare Function fnat12 Lib "haw.dll" -
+Private Declare Function fnat12 Lib "haw.dll" _
   Alias "asdf" (ByVal s As String, _
   ByVal t As String) _
   As Long
@@ -51,11 +51,18 @@ Private Type b4
 End Type
 
 ' f1
-Private Function _
-                    f1(s As String, 
+Private Function f1(s As String, _
                    Optional ok As Boolean = False) As Long
   Dim bs as b4
   f1 = 42
+End Function
+
+' f2
+Private Function _
+                    f2(s As String, _
+                   Optional ok As Boolean = False) As Long
+  Dim bs as b4
+  f2 = 42
 End Function
 
 ' s3 (comment mentions f2)

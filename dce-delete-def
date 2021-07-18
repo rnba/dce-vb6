@@ -14,7 +14,7 @@ multisubstitute {
 
 define import "^\\s*(P(ublic|rivate)\\s+)?Declare\\s+${t}\\s+${n}\\>"
 define const  "^\\s*(P(ublic|rivate)\\s+)Const\\s+${n}\\>"
-define proto  "^\\s*(P(ublic|rivate)\\s+)?${t}\\s+([GS]et\\s+)?${n}\\>"
+define proto  "^\\s*(P(ublic|rivate)\\s+)?${t}\\s+([GLS]et\\s+)?${n}\\>"
 
 exec sed -Eni "
   /^'.*/ {
