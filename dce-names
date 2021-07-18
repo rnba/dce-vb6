@@ -1,7 +1,8 @@
 #!/usr/bin/execlineb -WP
 
 importas -i file file
-pipeline { dce-comments $file }
+pipeline { dce-lex $file }
+pipeline { dce-comments -e basic }
 pipeline { dce-symbols }
 pipeline { cat -n }
 pipeline { sort -b -k 2,2n -k 1,1n }
