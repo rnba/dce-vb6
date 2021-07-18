@@ -7,7 +7,7 @@
 
 ::
 
-  $ dce-comments none.bas > result
+  $ dce-lex none.bas | dce-comments > result
 
   $ cat -A result
   a = 0$
