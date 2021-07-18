@@ -18,16 +18,3 @@
   <$>
   <$>
   x = "not a comment"<$>
-
-::
-
-  $ dce-comments -i leading.bas
-  $ sed 's/$/<$>/' leading.bas
-  <$>
-  <$>
-  stuff()<$>
-  <$>
-  <$>
-  <$>
-  <$>
-  x = "not a comment"<$>

@@ -25,9 +25,3 @@
     lessons("I'm", "You're", "We're")
 
   $ diff -u none.bas result
-
-::
-
-  $ dce-comments -i none.bas
-
-  $ diff_files $TESTDIR/Fixtures/comments/none.bas none.bas
