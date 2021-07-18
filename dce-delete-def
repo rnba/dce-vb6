@@ -5,6 +5,12 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
+multisubstitute {
+  define fun Function
+  define sub Sub
+  define enum Enum
+  define type Type
+}
 
 define import "^\\s*(P(ublic|rivate)\\s+)?Declare\\s+${t}\\s+${n}\\>"
 define const  "^\\s*(P(ublic|rivate)\\s+)Const\\s+${n}\\>"
@@ -26,7 +32,7 @@ exec sed -Eni "
     /${proto}/I {
       b def
     }
-    # the comment did not precede our function
+    # the comment did not precede our definition.
     # print the comment saved up in the hold space
     # followed by the current line, then start
     # a new cycle
