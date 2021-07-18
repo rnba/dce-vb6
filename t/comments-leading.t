@@ -7,7 +7,7 @@
 
 ::
 
-  $ dce-lex leading.bas | dce-comments > result
+  $ dce-lex leading.bas | dce-comments -e basic > result
 
   $ cat -A result
   $

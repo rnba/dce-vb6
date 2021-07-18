@@ -6,6 +6,14 @@ s/^/dce-comments: bad input: /
 w /dev/stderr
 Q 1
 
+:asic
+# the leader is there and the trailer is empty.
+# throw them away
+s/^\x1e(.*)\x15$/\1/
+# drop the rest added by dce-lex
+s/\x1f//g
+b
+
 :main
 h
 
@@ -14,19 +22,13 @@ h
 /^\x1e/!  b lexerr
 /\x15.+/  b lexerr
 
-# the leader is there and the trailer is empty.
-# throw them away
-s/^\x1e(.*)\x15$/\1/
-
-# if any token is either flavor of comment
-/\x1f('|Rem(\s|$)).*/ {
+# comments get special treatment
+/\x1f('.*|Rem\s.*|Rem)\x15/ {
   # drop it (it goes to the end-of-line)
-  s///
+  s//\x15/
   # drop whitespace that preceded it if any
-  s/(\x1f\s+)+$//
+  s/(\x1f\s+)+\x15/\x15/
   # it was all whitespace and comment?
   # eat the newline.
-  /^$/ d
+  /^\x1e\x15$/ d
 }
-
-s/\x1f//g
