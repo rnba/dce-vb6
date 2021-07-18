@@ -1,43 +1,32 @@
-#!/usr/bin/sed -Ensf
+#!/usr/bin/sed -Esf
 
-# the "Rem" comment leader is dealt with
-# swiftly: grep shows it's only used
-# as the first token on a line or inside
-# a '-comment.
+b main
+:lexerr
+s/^/dce-comments: bad input: /
+w /dev/stderr
+Q 1
 
-# lines where either comment leader is
-# the first non-WS character are dropped
-# completely.
+:main
+h
 
-x; z; x
+# dce-lex starts each line of output with 0x1e
+# and puts unrecognizable text behind 0x15
+/^\x1e/!  b lexerr
+/\x15.+/  b lexerr
 
-/('|\<Rem\>)/! b asis
+# the leader is there and the trailer is empty.
+# throw them away
+s/^\x1e(.*)\x15$/\1/
 
-/^(\s*)(('|\<Rem\>).*)/ {
-  h; s//\1/;
-  x; s//\2/
-  b print
+# if any token is either flavor of comment
+/\x1f('|Rem(\s|$)).*/ {
+  # drop it (it goes to the end-of-line)
+  s///
+  # drop whitespace that preceded it if any
+  s/(\x1f\s+)+$//
+  # it was all whitespace and comment?
+  # eat the newline.
+  /^$/ d
 }
 
-/^([^'"]*\s)('.*)$/ {
-  h; s//\1/;
-  x; s//\2/
-  b print
-}
-
-/^(([^'"]*"[^"]*")*[^'"]*)('.*)?$/ {
-  h; s//\1/;
-  x; s//\3/
-  b print
-}
-
-:print
-
-x; /\S/! b exit
-
-s/\s+$//
-
-:asis
-p
-
-:exit
+s/\x1f//g

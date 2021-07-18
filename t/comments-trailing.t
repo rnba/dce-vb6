@@ -7,7 +7,7 @@
 
 ::
 
-  $ dce-comments trailing.bas > result
+  $ dce-lex trailing.bas | dce-comments > result
 
   $ cat -A result
   a = 0$
