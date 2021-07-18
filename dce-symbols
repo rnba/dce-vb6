@@ -1,24 +1,22 @@
 #!/usr/bin/sed -Enf
 
-# ignore comments
-/^\s*(\<rem\>|').*/Id
-s/\s*(\<rem\>|').*//i
-
-s/\s+$//
+:s
 
 # join blocks of lines ending in "_"...
 /(^|\s+)_$/ {
   s///
   N
-  b
+  bs
 }
 # ... ending with one which doesn't
 
 # replace newlines inserted by N
 s/\n/ /g
 
+s/\s+$//
+
 s/^\s*//
-s/^(public|private)\s+//i
+s/^(public|private|static)\s+//i
 
 s/\s+/ /g
 
@@ -36,11 +34,19 @@ s/\s+/ /g
     q 1
   }
   N
+  /\s+_$/ {
+    s///
+    bn
+  }
   # now we have "Function fX\nNEXTLINE"
   # we're looking for "End Function"
-  /^(\w+) .+\nend \1$/I {
+  /^(\w+) \S+\s+end\s+\1$/I {
     # "Function fX\nEnd Function"
     #    (\w+)             \1
+    z; x;
+    bp
+  }
+  /^(property) \w+ \S+\s+end\s+\1$/I {
     z; x;
     bp
   }
@@ -58,8 +64,8 @@ s/\s+/ /g
   bp
 }
 
-/^(\w+)(\([[:digit:]]+\))? as\>.*/I {
-  s//var \1/
+/^(dim )?(\w+)(\([[:digit:]]+\))? as\>.*/I {
+  s//var \2/
   bp
 }
 
