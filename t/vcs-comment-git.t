@@ -16,13 +16,13 @@
   $ dce-vcs-comment-git a/foo.bas true
 
   $ git log
-  commit 3324b9858ccf66368afcf294bb85e54c0b17c760
+  commit ca9637be317d7ad49bd56c6c926acfef7492f156
   Author: Roflmao Snafubar <rs@example.org>
   Date:   Sun Feb 2 20:20:20 2020 +0000
   
       a/foo.bas: drop obsolete VCS comment
   
-  commit f824b0921b12fc7396f6d22cff16dfb727db9b02
+  commit 576414cbba4f2305958680926b60a05637c6c7ed
   Author: Roflmao Snafubar <rs@example.org>
   Date:   Sun Feb 2 20:20:20 2020 +0000
   
