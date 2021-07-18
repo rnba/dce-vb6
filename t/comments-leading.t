@@ -9,12 +9,12 @@
 
   $ dce-comments leading.bas > result
 
-  $ sed 's/$/<$>/' result
-  <$>
-  <$>
-  stuff()<$>
-  <$>
-  <$>
-  <$>
-  <$>
-  x = "not a comment"<$>
+  $ cat -A result
+  $
+  $
+  stuff()$
+  $
+  $
+  $
+  $
+  x = "not a comment"$
