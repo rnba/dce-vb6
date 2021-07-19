@@ -14,13 +14,33 @@ s/^\x1e(.*)\x15$/\1/
 s/\x1f//g
 b
 
+:oiled
+# remove ws
+/\x1f\s+/ s///g
+# handle line continuations
+:lcont
+/\x1f_\x15/ {
+  s///;
+  $ {
+    s/$/\x15\x03/; b
+  }
+  # can't use N here, that'd bypass
+  # the decommenting code this gets
+  # input from
+  H; d
+}
+H; g; x; z; x
+s/^\n//
+s/\n\x1e//g
+b
+
 :main
-h
 
 # dce-lex starts each line of output with 0x1e
 # and puts unrecognizable text behind 0x15
 /^\x1e/!  b lexerr
 /\x15.+/  b lexerr
+/\x15$/!  b lexerr
 
 # comments get special treatment
 /\x1f('.*|Rem\s.*|Rem)\x15/ {
