@@ -17,6 +17,6 @@
 
 ::
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
   2 enum Choice
   2 enum RGB

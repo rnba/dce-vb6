@@ -2,7 +2,7 @@
 
 importas -i file file
 pipeline { dce-lex $file }
-pipeline { dce-comments -e basic }
+pipeline { dce-comments -e boiled }
 pipeline { dce-symbols }
 pipeline { cat -n }
 pipeline { sort -b -k 2,2n -k 1,1n }

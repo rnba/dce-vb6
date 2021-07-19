@@ -5,15 +5,9 @@
 
 comments::
 
-  $ cat > comments.bas <<\EOF
-  > Rem Const p As Long = 42
-  >   Rem Const q As Long = 69
-  > ' Const r As Long = 42
-  >   ' Const s As Long = 69
-  > EOF
-
-  $ dce-symbols comments.bas
-
+that'd be dumb.  don't shoot yourself
+in the foot, put dce-comments between
+dce-lex and dce-symbols.
 
 trivial::
 
@@ -23,7 +17,7 @@ trivial::
   > Private Const c As Long = 69
   > EOF
 
-  $ dce-symbols trivial.bas
+  $ dce-lex trivial.bas | dce-comments -e boiled | dce-symbols
   5 const a
   5 const b
   5 const c
@@ -44,7 +38,7 @@ multiline::
   > As Long = 69
   > EOF
 
-  $ dce-symbols multiline.bas
+  $ dce-lex multiline.bas | dce-comments -e boiled | dce-symbols
   5 const a
   5 const b
   5 const c

@@ -1,77 +1,80 @@
 #!/usr/bin/sed -Enf
 
-:s
+b main
 
-# join blocks of lines ending in "_"...
-/(^|\s+)_$/ {
-  s///
-  N
-  bs
+:lexerr
+s/^/dce-symbols: bad input: /
+w /dev/stderr
+Q 1
+
+:incomplete
+g; s/^\x1f([^\x1f]+)\x1f([^\x1f]+)/\2 \1/
+s/.*/error: '&' without an 'end' statement/
+w /dev/stderr
+Q 1
+
+:body
+s/(\x1f[^\x1f]+).*/\1/
+$ b incomplete
+N;
+/\n\x1e/! b lexerr
+/\x15.+/  b lexerr
+/\x15$/!  b lexerr
+s/\n\x1e//
+# N concats what we had on the left
+# with what it pulled in on the right,
+# with \n between.
+# (Abc)\1 matches "AbcAbc".
+/^\x1f(\w+)\x1f(End)\x1f\1/I {
+  # "\x1fFunction\n\x1fEnd\x1fFunction"
+  z; x;
+  b print
 }
-# ... ending with one which doesn't
+g; b body
 
-# replace newlines inserted by N
-s/\n/ /g
+b
 
-s/\s+$//
+:main
 
-s/^\s*//
-s/^(public|private|static)\s+//i
+/^\x1e/!  b lexerr
+/\x15.+/  b lexerr
+/\x15$/!  b lexerr
 
-s/\s+/ /g
+s/^\x1e(.*)\x15$/\1/
 
-# ignore bodies, we only want file-level stuff
-/^(function|sub|enum|type|property [gls]et) (\w+).*/I {
-  s//\1 \2/
-  h
-  # now we have "Function fX" or "Property Get gY"
-  # also saved in hold space
-  :n
-  $ {
-    g
-    s/.*/error: '&' without an 'end' statement/
-    w /dev/stderr
-    q 1
-  }
-  N
-  /\s+_$/ {
-    s///
-    bn
-  }
-  # now we have "Function fX\nNEXTLINE"
-  # we're looking for "End Function"
-  /^(\w+) \S+\s+end\s+\1$/I {
-    # "Function fX\nEnd Function"
-    #    (\w+)             \1
-    z; x;
-    bp
-  }
-  /^(property) \w+ \S+\s+end\s+\1$/I {
-    z; x;
-    bp
-  }
-  g
-  bn
+/^\x1f(Public|Private|Static)\>/I s///
+
+/^(\x1f(Function|Sub|Enum|Type))(\x1f[^\x1f]+).*/I {
+  s//\1\3/; h;
+  b body
 }
 
-/^(declare) (function|sub) (\w+).*/I {
+/^(\x1fProperty)(\x1f[GLS]et)(\x1f\w+).*/I {
+  s//\1\2\3/; h;
+  b body
+}
+
+/^\x1f(Declare)\x1f(Function|Sub)\x1f(\w+).*/I {
   s//\1 \2 \3/
-  bp
+  b print
 }
 
-/^(const) (\w+).*/I {
+/^\x1f(Const)\x1f(\w+).*/I {
   s//\1 \2/
-  bp
+  b print
 }
 
-/^(dim )?(\w+)(\([[:digit:]]+\))? as\>.*/I {
+/^(\x1fDim)?\x1f(\w+).*/I {
   s//var \2/
-  bp
+  b print
 }
 
 b
 
-:p
+:print
+s/\x1f([^\x1f]+)/ \1/g
+s/^ //
+
 s/^(.+) (\w+)$/\L\1\E \2/
 s/\<function\>/fun/
 s/^property /p/

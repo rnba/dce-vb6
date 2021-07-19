@@ -12,7 +12,7 @@ comments::
   >   ' Dim s As Long = 69
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
 
 
 trivial::
@@ -23,7 +23,7 @@ trivial::
   > Static c As Long = 69
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
   5 var a
   5 var b
   5 var c
@@ -41,7 +41,7 @@ multiline::
   > As Long = 69
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
   5 var a
   5 var b
   5 var c

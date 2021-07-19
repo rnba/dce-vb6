@@ -15,7 +15,7 @@ trivial::
   > End Property
   > EOF
 
-  $ dce-symbols trivial.bas
+  $ dce-lex trivial.bas | dce-comments -e boiled | dce-symbols
   1 pget p1
   1 pget p2
 
@@ -40,6 +40,6 @@ trivial::
   >   Property
   > EOF
 
-  $ dce-symbols multiline.bas
+  $ dce-lex multiline.bas | dce-comments -e boiled | dce-symbols
   1 pget p1
   1 pget p2
