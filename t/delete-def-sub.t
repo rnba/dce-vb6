@@ -8,7 +8,7 @@
 
 ::
 
-  $ file=foo.bas t=Sub n=s3 dce-delete-def
+  $ file=foo.bas t=sub n=s3 dce-delete-def
 
   $ diff_files $TESTDIR/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas

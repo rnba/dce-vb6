@@ -7,7 +7,7 @@
 
 ::
 
-  $ file=foo.bas t=Property n=p2 dce-delete-def
+  $ file=foo.bas t=plet n=p2 dce-delete-def
 
   $ diff_files $TESTDIR/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas

@@ -5,16 +5,79 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
+ifelse { test $t = var }
+{
+  dce-print { "deleting variables does not work yet.  skipping." }
+  exit 1
+}
 multisubstitute {
-  define fun Function
-  define sub Sub
-  define enum Enum
-  define type Type
+  define mode.const oneline
+  define mode.var  oneline
+  define mode.dfun oneline
+  define mode.dsub oneline
+  define mode.fun  block
+  define mode.sub  block
+  define mode.enum block
+  define mode.type block
+  define mode.pget block
+  define mode.plet block
+  define mode.pset block
+
+  define kw.const Const
+  define kw.var   Dim
+  define kw.dfun  Declare
+  define kw.dsub  Declare
+  define kw.fun   Function
+  define kw.sub   Sub
+  define kw.enum  Enum
+  define kw.type  Type
+  define kw.pget  Property
+  define kw.plet  Property
+  define kw.pset  Property
+
+  define aux.pget Get
+  define aux.plet Let
+  define aux.pset Set
+  define aux.dfun Function
+  define aux.dsub Sub
+
+  define beg.const beg.1
+  define beg.var   beg.1
+  define beg.dfun  beg.2
+  define beg.dsub  beg.2
+
+  define end.const oneline
+  define end.var   oneline
+  define end.dfun  oneline
+  define end.dsub  oneline
+
+  define beg.fun  beg.1
+  define beg.sub  beg.1
+  define beg.enum beg.1
+  define beg.type beg.1
+
+  define end.fun  end.1
+  define end.sub  end.1
+  define end.enum end.1
+  define end.type end.1
+
+  define beg.pget beg.2
+  define beg.plet beg.2
+  define beg.pset beg.2
+
+  define end.pget end.1
+  define end.plet end.1
+  define end.pset end.1
+}
+multisubstitute {
+  define oneline "We don't go to Ravenholm anymore"
+
+  define beg.1 "${kw.${t}}"
+  define beg.2 "${kw.${t}}\\s+${aux.${t}}"
+  define end.1 "End\\s+${kw.${t}}"
 }
 
-define import "^\\s*(P(ublic|rivate)\\s+)?Declare\\s+${t}\\s+${n}\\>"
-define const  "^\\s*(P(ublic|rivate)\\s+)Const\\s+${n}\\>"
-define proto  "^\\s*(P(ublic|rivate)\\s+)?${t}\\s+([GLS]et\\s+)?${n}\\>"
+define decl "^\\s*((Public|Private)\\s+)?${${beg.${t}}}\\s+${n}\\>"
 
 exec sed -Eni "
   /^'.*/ {
@@ -23,14 +86,8 @@ exec sed -Eni "
     /^'.*/ {
       H; n; b comment
     }
-    /${import}/I {
-      b import
-    }
-    /${const}/I {
-      b const
-    }
-    /${proto}/I {
-      b def
+    /${decl}/I {
+      b ${mode.${t}}
     }
     # the comment did not precede our definition.
     # print the comment saved up in the hold space
@@ -41,31 +98,24 @@ exec sed -Eni "
     b
   }
 
-  :import
-  /${import}/I {
-    :ibody
+  b ${mode.${t}}
+
+  :oneline
+  /${decl}/I {
+    :lcont
     /_$/ {
-      n; b ibody
+      n; b lcont
     }
     n; b tail
   }
 
-  :const
-  /${const}/I {
-    :cbody
-    /_$/ {
-      n; b cbody
-    }
-    n; b tail
-  }
-
-  :def
-  /${proto}/I {
-    :dbody
-    /end\\s+${t}/I {
+  :block
+  /${decl}/I {
+    :body
+    /${${end.${t}}}/I {
       n; b tail
     }
-    n; b dbody
+    n; b body
   }
 
   :unrelated
