@@ -14,7 +14,7 @@
   > Private Declare Function f4 Lib "x.dll" Alias "n" (i As Long) As Long
   > EOF
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
   4 dsub s1
   4 dsub s2
   4 dsub s3

@@ -17,6 +17,6 @@
 
 ::
 
-  $ dce-symbols x.bas
+  $ dce-lex x.bas | dce-comments -e boiled | dce-symbols
   3 type b4
   3 type OneLong

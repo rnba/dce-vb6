@@ -1,77 +1,82 @@
-#!/usr/bin/sed -Enf
+#!/usr/bin/sed -Esf
+#
+# each line of output represents a file-level
+# (module-, class-level) definition from input.
+# does not grok raw VB6 code, requires output
+# of dce-comments -e boiled.
+# ignores #If compiler directives.
 
-:s
+b main
 
-# join blocks of lines ending in "_"...
-/(^|\s+)_$/ {
-  s///
-  N
-  bs
+# routines ##################
+:lexerr
+s/^/dce-symbols: bad input: /
+w /dev/stderr
+Q 1
+
+:incomplete
+g; s/^\x1f([^\x1f]+)\x1f([^\x1f]+)/\2 \1/
+s/.*/error: '&' without an 'end' statement/
+w /dev/stderr
+Q 1
+
+:body
+s/(\x1f[^\x1f]+).*/\1/
+$ b incomplete
+N;
+/\n\x1e/! b lexerr
+/\x15.+/  b lexerr
+/\x15$/!  b lexerr
+s/\n\x1e//
+# (Abc)\1 matches "AbcAbc".
+/^\x1f(\w+)\x1f(End)\x1f\1/I {
+  # "\x1fFunction\x1fEnd\x1fFunction"
+  z; x;
+  b print
 }
-# ... ending with one which doesn't
+g; b body
 
-# replace newlines inserted by N
-s/\n/ /g
+:main
 
-s/\s+$//
+/^\x1e/!  b lexerr
+/\x15.+/  b lexerr
+/\x15$/!  b lexerr
 
-s/^\s*//
-s/^(public|private|static)\s+//i
+s/^\x1e(.*)\x15$/\1/
 
-s/\s+/ /g
+/^\x1f(Public|Private|Static)\>/I s///
 
-# ignore bodies, we only want file-level stuff
-/^(function|sub|enum|type|property [gls]et) (\w+).*/I {
-  s//\1 \2/
-  h
-  # now we have "Function fX" or "Property Get gY"
-  # also saved in hold space
-  :n
-  $ {
-    g
-    s/.*/error: '&' without an 'end' statement/
-    w /dev/stderr
-    q 1
-  }
-  N
-  /\s+_$/ {
-    s///
-    bn
-  }
-  # now we have "Function fX\nNEXTLINE"
-  # we're looking for "End Function"
-  /^(\w+) \S+\s+end\s+\1$/I {
-    # "Function fX\nEnd Function"
-    #    (\w+)             \1
-    z; x;
-    bp
-  }
-  /^(property) \w+ \S+\s+end\s+\1$/I {
-    z; x;
-    bp
-  }
-  g
-  bn
+/^(\x1f(Function|Sub|Enum|Type))(\x1f[^\x1f]+).*/I {
+  s//\1\3/; h;
+  b body
 }
 
-/^(declare) (function|sub) (\w+).*/I {
+/^(\x1fProperty)(\x1f[GLS]et)(\x1f\w+).*/I {
+  s//\1\2\3/; h;
+  b body
+}
+
+/^\x1f(Declare)\x1f(Function|Sub)\x1f(\w+).*/I {
   s//\1 \2 \3/
-  bp
+  b print
 }
 
-/^(const) (\w+).*/I {
+/^\x1f(Const)\x1f(\w+).*/I {
   s//\1 \2/
-  bp
+  b print
 }
 
-/^(dim )?(\w+)(\([[:digit:]]+\))? as\>.*/I {
+/^(\x1fDim)?\x1f(\w+).*/I {
   s//var \2/
-  bp
+  b print
 }
 
-b
+d
 
-:p
+:print
+s/\x1f([^\x1f]+)/ \1/g
+s/^ //
+
 s/^(.+) (\w+)$/\L\1\E \2/
 s/\<function\>/fun/
 s/^property /p/
@@ -86,4 +91,3 @@ s/^d/4 &/
 s/^c/5 &/
 s/^v/5 &/
 
-p

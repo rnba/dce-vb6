@@ -15,7 +15,7 @@ ignores locals::
   > b As String = "hola"
   > EOF
 
-  $ dce-symbols scope.bas
+  $ dce-lex scope.bas | dce-comments -e boiled | dce-symbols
   5 const x
   1 sub s
   5 var a

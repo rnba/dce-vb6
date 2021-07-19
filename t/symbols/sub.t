@@ -15,7 +15,7 @@ trivial::
   > End Sub
   > EOF
 
-  $ dce-symbols trivial.bas
+  $ dce-lex trivial.bas | dce-comments -e boiled | dce-symbols
   1 sub s1
   1 sub s2
 
@@ -37,6 +37,6 @@ multiline::
   >   Sub
   > EOF
 
-  $ dce-symbols multiline.bas
+  $ dce-lex multiline.bas | dce-comments -e boiled | dce-symbols
   1 sub s1
   1 sub s2
