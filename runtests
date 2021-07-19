@@ -3,5 +3,6 @@
 getcwd -E S
 importas -i P PATH
 export PATH ${S}:${P}
+export TESTROOT ${S}/t
 
-dram -s /usr/bin/zsh $@
+dram -e TESTROOT -s /usr/bin/zsh $@

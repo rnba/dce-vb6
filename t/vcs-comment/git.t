@@ -1,8 +1,8 @@
 ::
 
-  $ . $TESTDIR/Setup
+  $ . $TESTROOT/Setup
 
-  $ cp -r $TESTDIR/Fixtures/a .
+  $ cp -r $TESTROOT/Fixtures/a .
   $ setup_repo .
 
 

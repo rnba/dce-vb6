@@ -1,8 +1,8 @@
 ::
 
-  $ . $TESTDIR/Setup
+  $ . $TESTROOT/Setup
 
-  $ cp -r $TESTDIR/Fixtures/vcs-comment/*.bas .
+  $ cp -r $TESTROOT/Fixtures/vcs-comment/*.bas .
 
 
 no argument -> complaint::

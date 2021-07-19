@@ -1,8 +1,8 @@
 ::
 
-  $ . $TESTDIR/Setup
+  $ . $TESTROOT/Setup
 
-  $ cp -r $TESTDIR/Fixtures/vcs-comment/*.bas .
+  $ cp -r $TESTROOT/Fixtures/vcs-comment/*.bas .
 
 
 no argument, no action::
@@ -24,7 +24,7 @@ result goes to stdout::
 
 leaves $1 unchanged::
 
-  $ diff_files $TESTDIR/Fixtures/vcs-comment/present.bas present.bas
+  $ diff_files $TESTROOT/Fixtures/vcs-comment/present.bas present.bas
 
 
 no VCS comment, no action::

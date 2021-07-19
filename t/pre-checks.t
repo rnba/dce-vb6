@@ -1,6 +1,6 @@
 ::
 
-  $ . $TESTDIR/Setup
+  $ . $TESTROOT/Setup
 
 
 $file does not exist::

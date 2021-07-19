@@ -15,7 +15,7 @@ displaypath()
 {
   case $1 in
   $PWD/*) reply=${1#$PWD/} ;;
-  $TESTDIR/*) reply=${1#$TESTDIR/} ;;
+  $TESTROOT/*) reply=${1#$TESTROOT/} ;;
   *) reply=$1
   esac
 }
