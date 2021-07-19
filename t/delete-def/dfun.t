@@ -7,7 +7,7 @@
 
 ::
 
-  $ file=foo.bas t=Function n=fnat12 dce-delete-def
+  $ file=foo.bas t=dfun n=fnat12 dce-delete-def
 
   $ diff_files $TESTROOT/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas
