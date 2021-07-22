@@ -67,6 +67,8 @@ s/^\x1e(.*)\x15$/\1/
 }
 
 /^(\x1fDim)?\x1f(\w+).*/I {
+  # does not work yet
+  d
   s//var \2/
   b print
 }
