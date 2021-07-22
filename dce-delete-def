@@ -15,6 +15,7 @@ multisubstitute {
   define mode.var  oneline
   define mode.dfun oneline
   define mode.dsub oneline
+  define mode.event oneline
   define mode.fun  block
   define mode.sub  block
   define mode.enum block
@@ -27,6 +28,7 @@ multisubstitute {
   define kw.var   Dim
   define kw.dfun  Declare
   define kw.dsub  Declare
+  define kw.event Event
   define kw.fun   Function
   define kw.sub   Sub
   define kw.enum  Enum
@@ -45,11 +47,13 @@ multisubstitute {
   define beg.var   beg.1
   define beg.dfun  beg.2
   define beg.dsub  beg.2
+  define beg.event beg.1
 
   define end.const oneline
   define end.var   oneline
   define end.dfun  oneline
   define end.dsub  oneline
+  define end.event oneline
 
   define beg.fun  beg.1
   define beg.sub  beg.1

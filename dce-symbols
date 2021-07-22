@@ -61,6 +61,11 @@ s/^\x1e(.*)\x15$/\1/
   b print
 }
 
+/^\x1f(Event)\x1f(\w+).*/I {
+  s//\1 \2/
+  b print
+}
+
 /^\x1f(Const)\x1f(\w+).*/I {
   s//\1 \2/
   b print
@@ -84,12 +89,13 @@ s/\<function\>/fun/
 s/^property /p/
 s/^declare /d/
 
-s/^f/1 &/
-s/^s/1 &/
-s/^p/1 &/
-s/^e/2 &/
-s/^t/3 &/
-s/^d/4 &/
-s/^c/5 &/
-s/^v/5 &/
+s/^f./1 &/
+s/^s./1 &/
+s/^p./1 &/
+s/^en/2 &/
+s/^t./3 &/
+s/^ev/4 &/
+s/^d./4 &/
+s/^c./5 &/
+s/^v./5 &/
 
