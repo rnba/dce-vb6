@@ -45,6 +45,7 @@ g; b body
 s/^\x1e(.*)\x15$/\1/
 
 /^(\x1fAttribute)(\x1f[^\x1f]+).*\>/I d
+/^(\x1fOption)(\x1f[^\x1f]+).*\>/I d
 
 /^\x1f(Public|Private|Static)\>/I s///
 
