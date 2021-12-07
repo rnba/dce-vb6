@@ -1,4 +1,6 @@
 Attribute VB_Name = "foo"
+Attribute VB_GlobalNameSpace = False
+Attribute bar.VB_VarHelpID = -1
 ' *******
 ' foo.bas
 '

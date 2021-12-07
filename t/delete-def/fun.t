@@ -12,7 +12,7 @@
   $ diff_files $TESTROOT/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas
   +++ foo.bas
-  @@ -50,13 +50,6 @@
+  @@ -52,13 +52,6 @@
        d As Byte
    End Type
    

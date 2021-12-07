@@ -12,7 +12,7 @@
   $ diff_files $TESTROOT/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas
   +++ foo.bas
-  @@ -76,10 +76,6 @@
+  @@ -78,10 +78,6 @@
      p1 = 42
    End Property
    

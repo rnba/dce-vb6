@@ -13,7 +13,7 @@
   $ diff_files $TESTROOT/Fixtures/a/foo.bas foo.bas
   --- Fixtures/a/foo.bas
   +++ foo.bas
-  @@ -65,13 +65,6 @@
+  @@ -67,13 +67,6 @@
      f2 = 42
    End Function
    
