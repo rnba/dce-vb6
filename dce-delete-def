@@ -5,11 +5,6 @@ multisubstitute {
   importas -i t t
   importas -i n n
 }
-ifelse { test $t = var }
-{
-  dce-print { "deleting variables does not work yet.  skipping." }
-  exit 1
-}
 multisubstitute {
   define mode.const oneline
   define mode.var  oneline
@@ -81,7 +76,7 @@ multisubstitute {
   define end.1 "End\\s+${kw.${t}}"
 }
 
-define decl "^\\s*((Public|Private)\\s+)?${${beg.${t}}}\\s+${n}\\>"
+define decl "^\\s*((Public|Private)\\s+${${beg.${t}}}|(Public|Private)|${${beg.${t}}})\\s+${n}\\>"
 
 exec sed -Eni "
   /^'.*/ {

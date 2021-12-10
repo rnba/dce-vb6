@@ -47,7 +47,7 @@ s/^\x1e(.*)\x15$/\1/
 /^(\x1fAttribute)(\x1f[^\x1f]+).*\>/I d
 /^(\x1fOption)(\x1f[^\x1f]+).*\>/I d
 
-/^\x1f(Public|Private|Static)\>/I s///
+:novis
 
 /^(\x1f(Function|Sub|Enum|Type))(\x1f[^\x1f]+).*/I {
   s//\1\3/; h;
@@ -74,9 +74,14 @@ s/^\x1e(.*)\x15$/\1/
   b print
 }
 
-/^(\x1fDim)?\x1f(\w+).*/I {
+/^(\x1fDim)?\x1f(\w+)(\x1f\([^)]*\))?(\x1fAs)\>.*/I {
   s//var \2/
   b print
+}
+
+/^\x1f(Public|Private|Static)\>/I {
+  s///
+  b novis
 }
 
 d
