@@ -28,3 +28,11 @@
      p1 = 42
    End Property
   [1]
+
+
+::
+
+  $ cp $TESTDIR/sub.bas sub.bas
+  $ file=sub.bas t=sub n=CopyADOStructure dce-delete-def
+
+  $ diff_files $TESTDIR/sub.bas sub.bas
